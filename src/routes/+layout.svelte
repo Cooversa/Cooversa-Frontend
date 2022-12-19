@@ -5,5 +5,7 @@
 </script>
 
 <Navbar/>
-<slot></slot>
+<main class="pt-[100px]">
+    <slot></slot>
+</main>
 <Footer/>
