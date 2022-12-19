@@ -19,7 +19,7 @@
             <a href="#curriculum" class="primary-nav-item">Curriculum</a>
             <a href="#curriculum" class="primary-nav-item">FAQs</a>
             <a href="#curriculum" class="primary-nav-item">Tuition</a>
-            <a href="#curriculum" class="primary-nav-item">Contact Us</a>
+            <a href="#about" class="primary-nav-item">About us</a>
         </nav>
 
         <!-- Secondary Nav -->
@@ -45,7 +45,7 @@
                 <a href="#curriculum" class="mobile-nav-item">Curriculum</a>
                 <a href="#curriculum" class="mobile-nav-item">FAQs</a>
                 <a href="#curriculum" class="mobile-nav-item">Tuition</a>
-                <a href="#curriculum" class="mobile-nav-item">Contact Us</a>
+                <a href="#about" class="mobile-nav-item">About Us</a>
                 <a href="/apply" class="mobile-nav-item-btn">Apply Now</a>
             </div>
         </div>
