@@ -1,4 +1,4 @@
-<section class="container_about">
+<section class="container_about" id="about">
     <div class="wrapper">
         <div>
             <img src="about-us.png" alt="A guy using is laptop">
@@ -33,7 +33,6 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-gap: 120px;
-        grid-auto-rows: 1fr;
     }
 
     .title {
@@ -71,5 +70,7 @@
             grid-row-start: 1;
         }
     }
+
+
 </style>
 

@@ -1,7 +1,7 @@
 <section class="what-we-do">
     <div class="wrapper">
         <div class="card">
-            <img src="html-css-js.png" alt="Html, Css and Javascript logo" class="card-image">
+            <img src="global.png" alt="Html, Css and Javascript logo" class="card-image">
             <h3 class="card-title">Global Opportunities</h3>
             <p class="card-text">
                 With the right training and practice, you will become a very
@@ -9,7 +9,7 @@
             </p>
         </div>
         <div class="card">
-            <img src="people.png" alt="Circle of people" class="card-image">
+            <img src="collaborative.png" alt="Circle of people" class="card-image">
             <h3 class="card-title">Collaborative Learning</h3>
             <p class="card-text">
                 You will learn through pair programming, group projects,
