@@ -17,8 +17,8 @@
         <!-- Primary Nav -->
         <nav class="primary-nav">
             <a href="#curriculum" class="primary-nav-item">Curriculum</a>
-            <a href="#curriculum" class="primary-nav-item">FAQs</a>
-            <a href="#curriculum" class="primary-nav-item">Tuition</a>
+            <a href="#faq" class="primary-nav-item">FAQs</a>
+            <a href="#tuition" class="primary-nav-item">Tuition</a>
             <a href="#about" class="primary-nav-item">About us</a>
         </nav>
 
@@ -43,8 +43,8 @@
             </button>
             <div class="mobile-nav-items-wrapper">
                 <a href="#curriculum" class="mobile-nav-item">Curriculum</a>
-                <a href="#curriculum" class="mobile-nav-item">FAQs</a>
-                <a href="#curriculum" class="mobile-nav-item">Tuition</a>
+                <a href="#faq" class="mobile-nav-item">FAQs</a>
+                <a href="#tuition" class="mobile-nav-item">Tuition</a>
                 <a href="#about" class="mobile-nav-item">About Us</a>
                 <a href="/apply" class="mobile-nav-item-btn">Apply Now</a>
             </div>

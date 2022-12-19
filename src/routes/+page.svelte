@@ -4,6 +4,7 @@
     import AboutUs from "$lib/components/AboutUs.svelte";
     import Curriculum from "$lib/components/Curriculum.svelte";
     import Tuition from "$lib/components/Tuition.svelte";
+    import Faq from "$lib/components/Faq.svelte";
 </script>
 <svelte:head>
     <title>Cooversa - Get a Software Engineering Diploma</title>
@@ -42,3 +43,4 @@
 <AboutUs/>
 <Curriculum/>
 <Tuition/>
+<Faq/>
