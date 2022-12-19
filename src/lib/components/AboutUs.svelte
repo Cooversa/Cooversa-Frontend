@@ -8,7 +8,7 @@
             <h2 class="title">Who are we?</h2>
             <p class="mb-[10px] lg:mb-[30px] text">
                 COOVERSA is a start-up educational institution that offers you tech diploma programs without
-                collecting tuition until you are hired and have started earning above &#8358;250,000 monthly.
+                collecting tuition until you are hired.
                 Our innovative approach to education provides you with the skills and knowledge you need to succeed in
                 the tech industry, without the burden of student debt.
             </p>
