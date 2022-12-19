@@ -32,7 +32,7 @@
     .what-we-do {
         max-width: 1300px;
         margin: 0 auto;
-        padding: 200px 20px;
+        padding: 100px 20px;
     }
 
     .wrapper {

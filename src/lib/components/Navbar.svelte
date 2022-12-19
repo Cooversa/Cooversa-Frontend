@@ -102,6 +102,7 @@
         justify-content: center;
         transform: translateX(-100%);
         transition: transform 0.3s ease-in-out;
+        z-index: 99999;
     }
 
     .mobile-nav-open {
@@ -118,6 +119,7 @@
         justify-content: center;
         transform: translateX(0);
         transition: all 0.3s ease-in-out;
+        z-index: 99999;
     }
 
     .mobile-nav-items-wrapper {
