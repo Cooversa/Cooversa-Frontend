@@ -1,13 +1,13 @@
 <footer>
     <div class="wrapper">
         <div class="footer-1">
-            <img src="transparent-icon-white.svg" width="100" alt="">
+            <img src="/transparent-icon-white.svg" width="100" alt="">
             <div class="social-icons mt-[30px] flex items-center space-x-5">
                 <a href="https://facebook.com/profile.php?id=100088533108683" target="_blank" rel="noreferrer">
-                    <img src="facebook-icon.png" alt="Facebook logo">
+                    <img src="/facebook-icon.png" alt="Facebook logo">
                 </a>
                 <a href="https://www.instagram.com/cooversa/" target="_blank" rel="noreferrer">
-                    <img src="instagram-icon.png" alt="Instagram logo">
+                    <img src="/instagram-icon.png" alt="Instagram logo">
                 </a>
             </div>
         </div>
@@ -15,8 +15,8 @@
             <h2 class="title">Resources</h2>
             <div class="links space-y-5">
                 <a href="/apply" class="link">Apply Now</a>
-                <a href="/#faq" class="link">FAQs</a>
-                <a href="/#curriculum" class="link">Curriculum</a>
+                <a href="/static#faq" class="link">FAQs</a>
+                <a href="/static#curriculum" class="link">Curriculum</a>
             </div>
         </div>
         <div>
@@ -24,7 +24,7 @@
             <div class="links space-y-5">
                 <!-- Telephone -->
                     <a class="flex items-center space-x-5" href="tel:+2349013334883" target="_blank" rel="noreferrer">
-                        <img src="call.png" alt="Telephone Icon">
+                        <img src="/call.png" alt="Telephone Icon">
                         <p>
                             +234 901-333-4883
                         </p>
@@ -32,14 +32,14 @@
 
 
                     <a class="flex items-center space-x-5" href="https://api.whatsapp.com/send?phone=2349013334883" target="_blank" rel="noreferrer">
-                        <img src="whatsapp.png" alt="Whatsapp Icon">
+                        <img src="/whatsapp.png" alt="Whatsapp Icon">
                         <p>
                             +234 901-333-4883
                         </p>
                     </a>
 
                 <a class="flex items-center space-x-5" href="mailto:info@cooversa.com" target="_blank" rel="noreferrer">
-                    <img src="gmail.png" alt="Telephone Icon">
+                    <img src="/gmail.png" alt="Telephone Icon">
                     <p>
                         info@cooversa.com
                     </p>

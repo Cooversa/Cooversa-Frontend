@@ -80,6 +80,7 @@
 
     .card-2 {
         transform: rotate(8.7deg);
+        border: #454545 solid 1px;
     }
 
     .card-title {
