@@ -47,4 +47,79 @@
     html {
         font-family: Gilmer, sans-serif;
     }
+
+
+    .form {
+        margin-top: 40px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 14px;
+        color: #454545;
+        margin-bottom: 10px;
+    }
+
+    .form-input {
+        width: 50%;
+        padding: 10px 20px;
+        border: 1px solid #e5e5e5;
+        border-radius: 5px;
+        font-size: 14px;
+        color: #454545;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border: 1px solid #000;
+    }
+
+    .form-error {
+        color: red;
+        font-size: 12px;
+        margin-top: 10px;
+    }
+
+    .form-button {
+        padding: 10px 20px;
+        background-color: #5c57ff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .alert-info {
+        background-color: #1c92f2;
+    }
+
+    .alert-success {
+        background-color: #0c7a0c;
+    }
+
+    .alert-warning {
+        background-color: #cba308;
+    }
+
+    .alert-error {
+        background-color: #d50f0f;
+    }
+
+    @media (max-width: 1200px) {
+        .form-input {
+            width: 80%;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .form-input {
+            width: 100%;
+        }
+    }
+
 }

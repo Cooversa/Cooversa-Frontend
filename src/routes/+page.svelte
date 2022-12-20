@@ -1,10 +1,12 @@
-<script>
+<script lang="ts">
     import Hero from "$lib/components/Hero.svelte";
     import WhatWeDo from "$lib/components/WhatWeDo.svelte";
     import AboutUs from "$lib/components/AboutUs.svelte";
     import Curriculum from "$lib/components/Curriculum.svelte";
     import Tuition from "$lib/components/Tuition.svelte";
     import Faq from "$lib/components/Faq.svelte";
+    import Loading from "$lib/shared/components/Loading.svelte";
+    import loading from "$lib/shared/store/loading.ts";
 </script>
 <svelte:head>
     <title>Cooversa - Get a Software Engineering Diploma</title>
@@ -38,6 +40,9 @@
     <meta name="twitter:image:alt" content="Cooversa" />
 </svelte:head>
 
+{#if $loading === true}
+    <Loading />
+{/if}
 <Hero/>
 <WhatWeDo/>
 <AboutUs/>

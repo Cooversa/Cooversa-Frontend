@@ -8,6 +8,13 @@
 		mobileNavOpen = !mobileNavOpen;
 	};
 
+	const navItemClicked = () => {
+		mobileNavOpen = false;
+		setShow(true)
+		addShadow = false;
+		lastScrollY = 0;
+	};
+
 	let visibleNav = true;
     let lastScrollY = 0;
 	let addShadow = false;
@@ -52,20 +59,21 @@
 		}} class="navbar-wrapper">
 			<!--Logo-->
 			<a href="/">
-				<img class="brand-logo" src="transparent-icon.svg" alt="Cooversa Logo" />
+				<img class="brand-logo" src="/transparent-icon.svg" alt="Cooversa Logo" />
 			</a>
 
 			<!-- Primary Nav -->
 			<nav class="primary-nav">
-				<a href="#curriculum" class="primary-nav-item">Curriculum</a>
-				<a href="#faq" class="primary-nav-item">FAQs</a>
-				<a href="#tuition" class="primary-nav-item">Tuition</a>
-				<a href="#about" class="primary-nav-item">About us</a>
+				<a on:click={navItemClicked} href="/#curriculum" class="primary-nav-item">Curriculum</a>
+				<a on:click={navItemClicked} href="/#faq" class="primary-nav-item">FAQs</a>
+				<a on:click={navItemClicked} href="/#tuition" class="primary-nav-item">Tuition</a>
+				<a on:click={navItemClicked} href="/#about" class="primary-nav-item">About us</a>
 			</nav>
 
 			<!-- Secondary Nav -->
-			<nav class="secondary-nav space-x-[80px]">
-				<a href="/apply" class="secondary-nav-item">Apply Now</a>
+			<nav class="secondary-nav space-x-5">
+				<a on:click={navItemClicked} href="/auth/login" class="primary-nav-item">Login</a>
+				<a on:click={navItemClicked} href="/apply" class="secondary-nav-item">Apply Now</a>
 			</nav>
 
 			<!-- Mobile Nav Toggler -->
@@ -102,11 +110,12 @@
 			</svg>
 		</button>
 		<div class="mobile-nav-items-wrapper">
-			<a on:click={toggleNav} href="#curriculum" class="mobile-nav-item">Curriculum</a>
-			<a on:click={toggleNav} href="#faq" class="mobile-nav-item">FAQs</a>
-			<a on:click={toggleNav} href="#tuition" class="mobile-nav-item">Tuition</a>
-			<a on:click={toggleNav} href="#about" class="mobile-nav-item">About Us</a>
-			<a on:click={toggleNav} href="/apply" class="mobile-nav-item-btn">Apply Now</a>
+			<a on:click={navItemClicked} href="/#curriculum" class="mobile-nav-item">Curriculum</a>
+			<a on:click={navItemClicked} href="/#faq" class="mobile-nav-item">FAQs</a>
+			<a on:click={navItemClicked} href="/#tuition" class="mobile-nav-item">Tuition</a>
+			<a on:click={navItemClicked} href="/#about" class="mobile-nav-item">About Us</a>
+			<a on:click={navItemClicked} href="/auth/login" class="mobile-nav-item">Login</a>
+			<a on:click={navItemClicked} href="/apply" class="mobile-nav-item-btn">Apply Now</a>
 		</div>
 	</div>
 </div>
@@ -232,7 +241,7 @@
 		}
 	}
 
-	@media (max-width: 768px) {
+	@media (max-width: 830px) {
 		.navbar-wrapper {
 			padding: 30px 20px;
 		}
