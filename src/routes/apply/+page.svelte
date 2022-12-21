@@ -86,6 +86,10 @@
 			{/if}
 		</div>
 
+		<p class="mt-5 my-3 text-[#454545]">
+			Started your application already? <a href="/auth/login" style="color: #5c57ff;">Login</a>
+		</p>
+
 		<button type="submit" class="form-button">
 			{#if loading}
 				<!-- Loading spinner -->

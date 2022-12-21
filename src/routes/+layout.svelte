@@ -10,6 +10,7 @@
 	import pocketbase from '$lib/pocketbase';
 	import { currentUser } from '$lib/stores/auth';
 	import { ClientResponseError } from 'pocketbase';
+	import {browser} from "$app/environment";
 
 	let alertsList: AlertType[] = [];
 
@@ -35,11 +36,13 @@
 	};
 
 	onMount(async () => {
-		await validateUserOrLogout();
-		pocketbase.authStore.onChange((token, model) => {
-			console.log('authStore.onChange', token, model);
-			currentUser.set(model);
-		});
+		if (browser) {
+			await validateUserOrLogout();
+			pocketbase.authStore.onChange((token, model) => {
+				console.log('authStore.onChange', token, model);
+				currentUser.set(model);
+			});
+		}
 	});
 </script>
 
