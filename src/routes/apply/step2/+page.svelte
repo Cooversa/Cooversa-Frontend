@@ -1,7 +1,7 @@
 <script lang="ts">
     import schema from './schema';
     import type { CreateProfileType } from "./schema";
-    import { completeRegistration } from "./logic";
+    import {completeRegistration, verifyPayment} from "./logic";
     import Selector from "$lib/shared/components/Selector.svelte";
     import countries from "$lib/utils/countries.js";
     import {currentUser} from "$lib/stores/auth";
@@ -19,7 +19,8 @@
         gender: '',
         state: "",
         country: "",
-        user: $currentUser?.id
+        user: $currentUser?.id,
+        paid: false,
     };
 
     const generateTransactionRef = () => {
@@ -47,7 +48,7 @@
                 embed: false,
                 disabled: false,
                 callback: (response: any) => {
-                    submit();
+                    submit(response);
                 },
                 onClose: () => {
                     makeAlert({
@@ -103,11 +104,14 @@
     let errors = {};
     let loading = false;
 
-    const submit = async () => {
+    const submit = async (response: any) => {
         loading = true;
         try {
-            await completeRegistration(values);
+            await verifyPayment(response.reference)
+            values.paid = true;
+            await completeRegistration(values)
         } catch (error) {
+
             errors = error.inner.reduce((acc, err) => {
                 return {
                     ...acc,

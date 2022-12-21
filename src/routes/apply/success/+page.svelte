@@ -33,8 +33,9 @@
 		</svg>
 
 		<h1 class="text-3xl font-bold text-center mt-4">Welcome to Cooversa!</h1>
-		<p class="text-center mt-4">
-			The next steps would be communicated to you through your email.
+		<p class="text-center text-[#454545] text-[14px] mt-4">
+			The next steps will be communicated to you via email. We look forward to
+			seeing you become a successful software developer!
 		</p>
 	</div>
 </section>

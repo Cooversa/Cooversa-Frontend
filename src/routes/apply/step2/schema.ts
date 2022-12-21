@@ -11,6 +11,7 @@ export type CreateProfileType = {
     state: string;
     country: string;
     user: any;
+    paid: boolean;
 }
 
 
