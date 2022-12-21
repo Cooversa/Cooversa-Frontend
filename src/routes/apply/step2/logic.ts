@@ -2,6 +2,7 @@ import type { CreateProfileType } from "./schema";
 import {makeAlert} from "$lib/shared/store/alert";
 import pocketbase from "$lib/pocketbase";
 import {ClientResponseError} from "pocketbase";
+import {goto} from "$app/navigation";
 
 export const completeRegistration = async (profile: CreateProfileType) => {
     try {
@@ -13,11 +14,7 @@ export const completeRegistration = async (profile: CreateProfileType) => {
             profile.user,
             {is_active: true, profile: response.id}
         );
-        makeAlert({
-            title: 'Success',
-            content: 'Registration successful',
-            type: 'success',
-        })
+        await goto('/apply/success')
     } catch (error) {
         if (error instanceof ClientResponseError) {
             Object.keys(error.data.data).forEach((key) => {
