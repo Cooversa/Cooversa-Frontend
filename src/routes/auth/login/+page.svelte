@@ -112,11 +112,6 @@
 
     }
 
-    .caption {
-        font-size: 14px;
-        color: #454545;
-        line-height: 200%;
-    }
 
     @media (max-width: 1200px) {
         .title {
@@ -133,8 +128,5 @@
             font-size: 30px;
         }
 
-        .caption br {
-            display: none;
-        }
     }
 </style>

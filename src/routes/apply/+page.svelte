@@ -9,7 +9,7 @@
 		password: '',
 		passwordConfirm: '',
 		role: 'student',
-		is_active: true,
+		is_active: false,
 	};
 
 

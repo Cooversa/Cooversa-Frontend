@@ -40,19 +40,6 @@
 		-o-transform: translate(-50%, -50%);
 	}
 
-	.loading-overlay-spinner {
-		width: 50px;
-		height: 50px;
-		border: 5px solid #f3f3f3;
-		border-top: 5px solid #5c57ff;
-		border-radius: 50%;
-		animation: spin 2s linear infinite;
-		-webkit-animation: spin 2s linear infinite;
-		-ms-animation: spin 2s linear infinite;
-		-moz-animation: spin 2s linear infinite;
-		-o-animation: spin 2s linear infinite;
-	}
-
 	@keyframes spin {
 		0% {
 			transform: rotate(0deg);

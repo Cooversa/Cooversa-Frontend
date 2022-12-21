@@ -1,7 +1,7 @@
 <script lang="ts">
     import schema from './schema';
     import type { CreateProfileType } from "./schema";
-    import { createUser } from "./logic";
+    import { completeRegistration } from "./logic";
     import Selector from "$lib/shared/components/Selector.svelte";
     import countries from "$lib/utils/countries.js";
     import {currentUser} from "$lib/stores/auth";
@@ -9,6 +9,7 @@
     import {goto} from "$app/navigation";
     import {PUBLIC_PAYSTACK_PUBLIC_KEY} from "$env/static/public"
     import {makeAlert} from "$lib/shared/store/alert";
+    import PaystackPop from '@paystack/inline-js';
 
     let values: CreateProfileType = {
         first_name: "",
@@ -32,25 +33,44 @@
         return text;
     }
 
-    const config = {
-        key: PUBLIC_PAYSTACK_PUBLIC_KEY,
-        email: $currentUser?.email,
-        amount: 8000 * 100,
-        currency: "NGN",
-        ref: generateTransactionRef(),
-        embed: false,
-        disabled: false,
-        callback: (response: any) => {
-            submit();
-        },
-        onClose: () => {
-            makeAlert({
-                title: "Payment Cancelled",
-                content: "You cancelled the payment process",
-                type: "error"
+
+    const pay = async () => {
+        loading = true;
+        try {
+            await schema.validate(values, { abortEarly: false });
+            let paystack = PaystackPop.setup({
+                key: PUBLIC_PAYSTACK_PUBLIC_KEY,
+                email: $currentUser?.email,
+                amount: 8000 * 100,
+                currency: "NGN",
+                ref: generateTransactionRef(),
+                embed: false,
+                disabled: false,
+                callback: (response: any) => {
+                    submit();
+                },
+                onClose: () => {
+                    makeAlert({
+                        title: "Payment Cancelled",
+                        content: "You cancelled the payment process",
+                        type: "error"
+                    })
+                },
             })
-        },
-    };
+            paystack.openIframe();
+            errors = {};
+        } catch (error) {
+            errors = error.inner.reduce((acc, err) => {
+                return {
+                    ...acc,
+                    [err.path]: err.message
+                };
+            }, {});
+        } finally {
+            loading = false;
+        }
+
+    }
 
     let genders = [
         {
@@ -86,9 +106,7 @@
     const submit = async () => {
         loading = true;
         try {
-            await schema.validate(values, { abortEarly: false });
-            await createUser(values);
-            errors = {};
+            await completeRegistration(values);
         } catch (error) {
             errors = error.inner.reduce((acc, err) => {
                 return {
@@ -96,6 +114,7 @@
                     [err.path]: err.message
                 };
             }, {});
+            console.log(error);
         } finally {
             loading = false;
         }
@@ -110,7 +129,7 @@
 </script>
 
 <svelte:head>
-    <title>Cooversa - Register</title>
+    <title>Cooversa - Complete your application</title>
 </svelte:head>
 
 <section id="apply">
@@ -120,7 +139,7 @@
     />
         please note that you will be charged <b>&#8358;8,000</b>
     </p>
-    <form class="form" on:submit|preventDefault={submit}>
+    <form class="form" on:submit|preventDefault={pay}>
 
 
         <div class="form-group">

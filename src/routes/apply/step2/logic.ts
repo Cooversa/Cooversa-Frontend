@@ -3,14 +3,15 @@ import {makeAlert} from "$lib/shared/store/alert";
 import pocketbase from "$lib/pocketbase";
 import {ClientResponseError} from "pocketbase";
 
-export const createUser = async (profile: CreateProfileType) => {
+export const completeRegistration = async (profile: CreateProfileType) => {
     try {
         const response = await pocketbase.collection('profile').create(profile);
+        console.log(response)
 
         // Update the user profile
         await pocketbase.collection('users').update(
-            profile.user.id,
-            {is_active: true, profile: response.data.id}
+            profile.user,
+            {is_active: true, profile: response.id}
         );
         makeAlert({
             title: 'Success',
