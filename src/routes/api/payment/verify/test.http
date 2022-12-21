@@ -1,1 +1,1 @@
-GET http://localhost:5173/api/payment/verify?reference=C1zJqSzUJS
+GET https://cooversa.com/api/payment/verify?reference=C1zJqSzUJS
