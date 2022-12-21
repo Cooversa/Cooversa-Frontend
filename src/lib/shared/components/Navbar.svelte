@@ -114,7 +114,6 @@
 			<a on:click={navItemClicked} href="/#faq" class="mobile-nav-item">FAQs</a>
 			<a on:click={navItemClicked} href="/#tuition" class="mobile-nav-item">Tuition</a>
 			<a on:click={navItemClicked} href="/#about" class="mobile-nav-item">About Us</a>
-			<a on:click={navItemClicked} href="/auth/login" class="mobile-nav-item">Login</a>
 			<a on:click={navItemClicked} href="/apply" class="mobile-nav-item-btn">Apply Now</a>
 		</div>
 	</div>
@@ -221,7 +220,7 @@
 	}
 
 	.mobile-nav-item-btn:hover {
-		background-color: #5c57ff;
+		background-color: #000000;
 		color: #fff;
 	}
 
@@ -241,7 +240,7 @@
 		}
 	}
 
-	@media (max-width: 830px) {
+	@media (max-width: 850px) {
 		.navbar-wrapper {
 			padding: 30px 20px;
 		}

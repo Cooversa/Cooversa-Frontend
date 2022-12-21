@@ -1,14 +1,22 @@
-import type { CreateUserType } from "./schema";
+import type { CreateProfileType } from "./schema";
 import {makeAlert} from "$lib/shared/store/alert";
 import pocketbase from "$lib/pocketbase";
 import {ClientResponseError} from "pocketbase";
-import {goto} from "$app/navigation";
 
-export const createUser = async (user: CreateUserType) => {
+export const createUser = async (profile: CreateProfileType) => {
     try {
-        await pocketbase.collection('users').create(user);
-        await pocketbase.collection('users').authWithPassword(user.email, user.password);
-        await goto('/apply/step2');
+        const response = await pocketbase.collection('profile').create(profile);
+
+        // Update the user profile
+        await pocketbase.collection('users').update(
+            profile.user.id,
+            {is_active: true, profile: response.data.id}
+        );
+        makeAlert({
+            title: 'Success',
+            content: 'Registration successful',
+            type: 'success',
+        })
     } catch (error) {
         if (error instanceof ClientResponseError) {
             Object.keys(error.data.data).forEach((key) => {
