@@ -10,6 +10,7 @@
     import {PUBLIC_PAYSTACK_PUBLIC_KEY} from "$env/static/public"
     import {makeAlert} from "$lib/shared/store/alert";
     import PaystackPop from '@paystack/inline-js';
+    import {browser} from "$app/environment";
 
     let values: CreateProfileType = {
         first_name: "",
@@ -126,8 +127,10 @@
 
     onMount(() => {
         console.log($currentUser);
-        if ($currentUser === null) {
-            goto('/auth/login');
+        if (browser) {
+            if ($currentUser === null) {
+                goto('/auth/login');
+            }
         }
     })
 </script>
