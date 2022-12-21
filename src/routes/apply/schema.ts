@@ -1,16 +1,19 @@
 import * as yup from 'yup';
 
+type Role = 'student' | 'teacher';
+
+
 
 export type CreateUserType = {
-    name: string;
     email: string;
     password: string;
-    confirmPassword: string;
+    passwordConfirm: string;
+    role: Role;
+    is_active: boolean;
 }
 
 
 const schema = yup.object().shape({
-    name: yup.string().required('Name is required'),
     email: yup.string().email('Invalid email').required('Email is required'),
     // Password must be at least 8 characters long, contain at least one uppercase letter,
     // one lowercase letter, one number, and one special character

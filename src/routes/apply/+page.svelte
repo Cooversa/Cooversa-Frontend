@@ -3,11 +3,13 @@
 	import type { CreateUserType } from "./schema";
 	import { createUser } from "./logic";
 
+
 	let values: CreateUserType = {
 		email: '',
-		name: '',
 		password: '',
-		confirmPassword: ''
+		passwordConfirm: '',
+		role: 'student',
+		is_active: true,
 	};
 
 
@@ -47,13 +49,6 @@
 		please note that you will be charged <b>&#8358;8,000</b>
 	</p>
 	<form class="form" on:submit|preventDefault={submit}>
-		<div class="form-group">
-			<label for="name" class="form-label">Name</label>
-			<input type="text" name="name" id="name" class="form-input" bind:value={values.name} />
-			{#if errors.name}
-				<p class="form-error">{errors.name}</p>
-			{/if}
-		</div>
 
 		<div class="form-group">
 			<label for="email" class="form-label">Email</label>
@@ -82,12 +77,12 @@
 			<input
 				type="password"
 				name="confirmPassword"
-				bind:value={values.confirmPassword}
+				bind:value={values.passwordConfirm}
 				id="confirmPassword"
 				class="form-input"
 			/>
-			{#if errors.confirmPassword}
-				<p class="form-error">{errors.confirmPassword}</p>
+			{#if errors.passwordConfirm}
+				<p class="form-error">{errors.passwordConfirm}</p>
 			{/if}
 		</div>
 
