@@ -64,7 +64,8 @@
 
     const pay = async () => {
         if (amount === 0) {
-            return submit()
+            await submit()
+            return;
         }
         loading = true;
         try {
@@ -137,7 +138,7 @@
     const submit = async (response?: any) => {
         loading = true;
         try {
-            if (coupon.length > 0) {
+            if (response) {
                 await verifyPayment(response.reference)
             }
             values.paid = true;
