@@ -84,7 +84,30 @@
         margin-top: 10px;
     }
 
+    .form-helpertext {
+        color: #454545;
+        font-size: 12px;
+        margin-top: 10px;
+    }
+
     .form-button {
+        padding: 10px 20px;
+        background-color: #5c57ff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .form-button:hover {
+        background-color: #4a44e0;
+    }
+
+    .form-input-button {
         padding: 10px 20px;
         background-color: #5c57ff;
         color: #fff;
@@ -94,42 +117,8 @@
         cursor: pointer;
     }
 
-    .form-select {
-        width: 100%;
-        padding: 10px 20px;
-        border: 1px solid #e5e5e5;
-        border-radius: 5px;
-        font-size: 14px;
-        color: #454545;
-    }
-
-    .form-select:focus {
-        outline: none;
-        border: 1px solid #000;
-    }
-
-    .form-select option {
-        color: #454545;
-    }
-
-    .form-select option:hover {
-        background-color: #5c57ff;
-        color: #fff;
-    }
-
-    .form-select option:active {
-        background-color: #5c57ff;
-        color: #fff;
-    }
-
-    .form-select option:disabled {
-        color: #e5e5e5;
-    }
-
-    .form-select-option {
-        padding: 10px 20px;
-        font-size: 14px;
-        color: #454545;
+    .form-input-button:hover {
+        background-color: #4a44e0;
     }
 
     .alert-info {
@@ -159,6 +148,19 @@
     @media (max-width: 768px) {
         .form-input {
             width: 100%;
+        }
+
+        .form-input-button {
+            display: block;
+            margin-top: 20px;
+        }
+
+        .form-button {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
         }
     }
 

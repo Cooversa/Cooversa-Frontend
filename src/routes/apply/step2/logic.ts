@@ -5,6 +5,19 @@ import { ClientResponseError } from 'pocketbase';
 import { goto } from '$app/navigation';
 import axios, { AxiosError } from 'axios';
 
+
+export const generateTransactionRef = () => {
+	let text = '';
+	const possible =
+		'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+	for (let i = 0; i < 10; i++)
+		text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+	return text;
+}
+
+
 export const verifyPayment = async (reference: string) => {
 	try {
         const url = '/api/payment/verify';
@@ -31,8 +44,46 @@ export const verifyPayment = async (reference: string) => {
 		throw new Error('Payment Error');
 	}
 };
-export const completeRegistration = async (profile: CreateProfileType) => {
+
+export const verifyCoupon = async (coupon: string) => {
+	let error = null;
+	let discount = null;
 	try {
+		const response = await pocketbase
+			.collection('coupon')
+			.getFirstListItem(`code="${coupon}"`);
+		if (!response.is_active) {
+			error = 'This coupon is no longer active';
+		} else if (response.usage >= response.max_usage) {
+			error = 'This coupon has been used up';
+		}
+		else {
+			discount = response.amount;
+		}
+	} catch (err) {
+		error = 'Invalid coupon';
+		console.log('err', err);
+	}
+
+	return {error, discount};
+};
+
+const incrementCouponUsage = async (code: string) => {
+	const url = `/api/payment/increase-coupon-usage?coupon=${code}`;
+	try {
+		await axios.get(url);
+	} catch (error) {
+		console.log('error', error);
+	}
+}
+
+
+
+export const completeRegistration = async (profile: CreateProfileType, coupon = '') => {
+	try {
+		if (coupon.length > 0) {
+			await incrementCouponUsage(coupon);
+		}
 		const response = await pocketbase.collection('profile').create(profile);
 		console.log(response);
 

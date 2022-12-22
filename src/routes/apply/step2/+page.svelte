@@ -1,7 +1,7 @@
 <script lang="ts">
     import schema from './schema';
     import type { CreateProfileType } from "./schema";
-    import {completeRegistration, verifyPayment} from "./logic";
+    import {completeRegistration, generateTransactionRef, verifyCoupon, verifyPayment} from "./logic";
     import Selector from "$lib/shared/components/Selector.svelte";
     import countries from "$lib/utils/countries.js";
     import {currentUser} from "$lib/stores/auth";
@@ -10,6 +10,7 @@
     import {PUBLIC_PAYSTACK_PUBLIC_KEY} from "$env/static/public"
     import {makeAlert} from "$lib/shared/store/alert";
     import {browser} from "$app/environment";
+    import LoadingSvg from "$lib/shared/components/LoadingSvg.svelte";
 
     let values: CreateProfileType = {
         first_name: "",
@@ -23,16 +24,39 @@
         paid: false,
     };
 
-    const generateTransactionRef = () => {
-        let text = '';
-        const possible =
-            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let coupon;
+    let couponMessage;
+    let couponError;
+    let couponLoading;
+    let amount = 8000;
+    let usedCoupon = false;
 
-        for (let i = 0; i < 10; i++)
-            text += possible.charAt(Math.floor(Math.random() * possible.length));
+    const applyCoupon = async () => {
+        usedCoupon = false;
+        couponLoading = true;
+        couponMessage = null;
+        couponError = null;
 
-        return text;
+        try {
+            const {discount, error} = await verifyCoupon(coupon);
+            if (error) {
+                couponError = error;
+            } else {
+                amount = 8000 - discount;
+                usedCoupon = true;
+                couponMessage = `Coupon applied successfully. You will pay ₦${amount} instead of ₦8000`;
+            }
+        } catch (e) {
+            couponError = e.message;
+        } finally {
+            couponLoading = false;
+        }
+
+
     }
+
+
+
 
 
     const pay = async () => {
@@ -42,7 +66,7 @@
             let paystack = PaystackPop.setup({
                 key: PUBLIC_PAYSTACK_PUBLIC_KEY,
                 email: $currentUser?.email,
-                amount: 8000 * 100,
+                amount: amount * 100,
                 currency: "NGN",
                 ref: generateTransactionRef(),
                 embed: false,
@@ -109,7 +133,7 @@
         try {
             await verifyPayment(response.reference)
             values.paid = true;
-            await completeRegistration(values)
+            await completeRegistration(values, coupon);
         } catch (error) {
 
             errors = error.inner.reduce((acc, err) => {
@@ -237,30 +261,37 @@
             {/if}
         </div>
 
-        <button class="form-button">
+        <div class="form-group">
+            <label for="coupon" class="form-label">Discount Code</label>
+            <div>
+                <input
+                        class="form-input"
+                        type="text"
+                        name="coupon"
+                        id="coupon"
+                        placeholder="e.g COOVERSA20"
+                        bind:value={coupon}
+                />
+                <button type="button" on:click={applyCoupon} class="form-input-button">
+                    {#if couponLoading}
+                        <LoadingSvg />
+                    {:else}
+                        Apply Coupon
+                    {/if}
+                </button>
+            </div>
+            {#if couponMessage}
+                <p class="form-helpertext text-green-600">{couponMessage}</p>
+            {/if}
+            {#if couponError}
+                <p class="form-error">{couponError}</p>
+            {/if}
+        </div>
+
+        <button type="submit" class="form-button">
             {#if loading}
                 <!-- Loading spinner -->
-                <svg
-                        class="animate-spin  h-5 w-5 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                >
-                    <circle
-                            class="opacity-25
-						"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            stroke-width="4"
-                    ></circle>
-                    <path
-                            class="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8v8z"
-                    ></path>
-                </svg>
+                <LoadingSvg/>
             {:else}
                 Continue to pay
             {/if}
