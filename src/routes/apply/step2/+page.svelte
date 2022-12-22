@@ -47,7 +47,7 @@
                     amount = 0;
                 }
                 usedCoupon = true;
-                couponMessage = `Coupon applied successfully. You will pay ₦${amount} instead of ₦8000`;
+                couponMessage = amount === 0 ? "Coupon applied successfully. You are eligible for free registration" : `Coupon applied successfully. You will pay ${amount} Naira`;
             }
         } catch (e) {
             couponError = e.message;
@@ -63,6 +63,10 @@
 
 
     const pay = async () => {
+        if (amount === 0) {
+            submit(values);
+            return;
+        }
         loading = true;
         try {
             await schema.validate(values, { abortEarly: false });
@@ -295,6 +299,8 @@
             {#if loading}
                 <!-- Loading spinner -->
                 <LoadingSvg/>
+            {:else if (amount === 0)}
+                Complete Registration
             {:else}
                 Continue to pay
             {/if}
