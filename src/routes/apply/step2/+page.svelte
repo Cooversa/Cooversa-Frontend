@@ -43,6 +43,9 @@
                 couponError = error;
             } else {
                 amount = 8000 - discount;
+                if (amount < 0) {
+                    amount = 0;
+                }
                 usedCoupon = true;
                 couponMessage = `Coupon applied successfully. You will pay ₦${amount} instead of ₦8000`;
             }
