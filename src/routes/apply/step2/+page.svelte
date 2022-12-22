@@ -64,8 +64,7 @@
 
     const pay = async () => {
         if (amount === 0) {
-            submit(values);
-            return;
+            return submit()
         }
         loading = true;
         try {
