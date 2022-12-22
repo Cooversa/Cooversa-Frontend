@@ -135,10 +135,12 @@
     let errors = {};
     let loading = false;
 
-    const submit = async (response: any) => {
+    const submit = async (response?: any) => {
         loading = true;
         try {
-            await verifyPayment(response.reference)
+            if (coupon.length > 0) {
+                await verifyPayment(response.reference)
+            }
             values.paid = true;
             await completeRegistration(values, coupon);
         } catch (error) {
