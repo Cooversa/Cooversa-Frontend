@@ -44,14 +44,12 @@ const mySchema = z.object({
 
 const schema = yup.object().shape({
 	email: yup.string().email('Invalid email').required('Email is required'),
-	// Password must be at least 8 characters long, contain at least one uppercase letter,
-	// one lowercase letter, one number, and one special character
 	password: yup
 		.string()
 		.matches(
-			/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-])[A-Za-z\d@$!%*?&-]{8,}$/,
-			`Password must be at least 8 characters long, contain at least one uppercase letter, 
-            one lowercase letter, one number, and one special character`
+			/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\w\W]{8,}$/,
+			`Password must be at least 8 characters long, contain at least one uppercase letter,
+			one lowercase letter, and one number`
 		)
 		.required('Password is required'),
 	passwordConfirm: yup
