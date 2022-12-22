@@ -77,7 +77,7 @@
 			</nav>
 
 			<!-- Mobile Nav Toggler -->
-			<button on:click={toggleNav} class="mobile-nav-toggle">
+			<button on:click={toggleNav} class="mobile-nav-toggle" aria-label="toggle menu">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"

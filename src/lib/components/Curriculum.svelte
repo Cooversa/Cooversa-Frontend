@@ -76,7 +76,7 @@
                 <div class="accordion-items" class:active={activeTrackId === track.id}>
                     <div class="accordion-header" on:click={() => changeActiveAccordion(track.id)} on:keydown={() => console.log('Key Down')}>
                         <h3 class="accordion-title">{track.name}</h3>
-                        <button class="accordion-button" aria-expanded="false">
+                        <button class="accordion-button" aria-label="Expand Accordion" aria-expanded="false">
                             {#if activeTrackId === track.id}
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up"><polyline points="18 15 12 9 6 15"></polyline></svg>
                             {:else}
