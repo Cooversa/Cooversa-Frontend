@@ -77,20 +77,31 @@ const incrementCouponUsage = async (code: string) => {
 	}
 }
 
+export const sendWelcomeEmail = async (email: string, name: string) => {
+	const url = `/api/email/welcome?email=${email}&name=${name}`;
+	try {
+		await axios.get(url);
+	} catch (error) {
+		console.log('error', error);
+	}
+}
 
-
-export const completeRegistration = async (profile: CreateProfileType, coupon = '') => {
+export const completeRegistration = async (profile: CreateProfileType, email: string, coupon = '') => {
 	try {
 		if (coupon.length > 0) {
 			await incrementCouponUsage(coupon);
 		}
 		const response = await pocketbase.collection('profile').create(profile);
-		console.log(response);
 
 		// Update the user profile
 		await pocketbase
 			.collection('users')
 			.update(profile.user, { is_active: true, profile: response.id });
+
+		// Send welcome email
+		await sendWelcomeEmail(email, profile.first_name);
+
+		// Redirect to success page
 		await goto('/apply/success');
 	} catch (error) {
 		if (error instanceof ClientResponseError) {
@@ -115,3 +126,4 @@ export const completeRegistration = async (profile: CreateProfileType, coupon = 
 		console.log('err', error);
 	}
 };
+
