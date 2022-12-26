@@ -142,7 +142,7 @@
                 await verifyPayment(response.reference)
             }
             values.paid = true;
-            await completeRegistration(values, coupon);
+            await completeRegistration(values, $currentUser.email, coupon);
         } catch (error) {
 
             errors = error.inner.reduce((acc, err) => {
