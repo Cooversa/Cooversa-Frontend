@@ -2,7 +2,7 @@
     import '../../styles/app.css'
     import AppNavbar from "$lib/shared/components/AppNavbar.svelte";
     import Sidebar from "$lib/shared/components/Sidebar.svelte";
-    import {currentUser, initCurrentUser} from "$lib/stores/auth";
+    import {currentUser} from "$lib/stores/auth";
     import {onDestroy, onMount} from "svelte";
     import {browser} from "$app/environment";
     import {goto} from "$app/navigation";
@@ -12,9 +12,14 @@
     import AlertsList from '$lib/shared/components/AlertsList.svelte';
     import Alert from '$lib/shared/components/Alert.svelte';
     import type { Alert as AlertType } from '$lib/shared/store/alert.ts';
+    import loading from "$lib/shared/store/loading";
+    import {navigating} from "$app/stores";
+    import Loading from "$lib/shared/components/Loading.svelte";
 
 
     let isSidebarOpen = true;
+
+    $: loading.set(!!$navigating)
 
     const setSidebarState = (e) => {
         isSidebarOpen = e.detail.state
@@ -36,8 +41,6 @@
               await goto('/auth/login')
             }
 
-            await initCurrentUser()
-
             await pocketbase.authStore.onChange((token, model) => {
                 if (!token) {
                     goto('/auth/login')
@@ -56,6 +59,9 @@
     <div class="h-screen p w-full {isSidebarOpen ? 'ml-72' : 'ml-16'} transition-all">
         <AppNavbar/>
         <div class="p-7">
+            {#if $loading}
+                <Loading/>
+            {/if}
             {#if alertsList.length}
                 <AlertsList>
                     {#each alertsList as alert}

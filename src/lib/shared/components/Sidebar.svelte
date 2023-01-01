@@ -108,11 +108,13 @@
 
 	<!-- Logo -->
 	<div >
-		<img
-			src={isOpen ? '/transparent-icon.svg' : '/transparent-c.svg'}
-			alt="Cooversa white icon"
-			class={isOpen ? 'w-40' : 'w-10'}
-		/>
+		<a href="/dashboard">
+			<img
+					src={isOpen ? '/transparent-icon.svg' : '/transparent-c.svg'}
+					alt="Cooversa white icon"
+					class={isOpen ? 'w-40' : 'w-10'}
+			/>
+		</a>
 	</div>
 
 	<div class="flex flex-col justify-between mt-10 text-gray-700">
