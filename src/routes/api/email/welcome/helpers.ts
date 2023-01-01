@@ -1,4 +1,4 @@
-import * as sendgrid from '@sendgrid/mail';
+import sendgrid from '@sendgrid/mail';
 import type {MailDataRequired} from '@sendgrid/helpers/classes/mail';
 import {PRIVATE_SENDGRID_API_KEY} from "$env/static/private";
 
