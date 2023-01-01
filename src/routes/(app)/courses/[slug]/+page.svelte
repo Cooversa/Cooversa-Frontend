@@ -59,7 +59,7 @@
 
 <div>
     <h1 class="text-3xl font-semibold ">{course.name}</h1>
-    <div class="image-wrapper my-10 max-w-5xl">
+    <div class="image-wrapper my-10 max-w-full rounded overflow-hidden mx-auto">
         <img class="image" src={pocketbase.getFileUrl(course, course.featured_image)}>
     </div>
     <article class="prose max-w-none">{@html course.description}</article>
