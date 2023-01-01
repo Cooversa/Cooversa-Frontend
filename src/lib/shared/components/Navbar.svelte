@@ -1,6 +1,7 @@
 <script lang="ts">
 	import {onMount} from "svelte";
 	import {slide} from "svelte/transition";
+	import {currentUser} from "$lib/stores/auth";
 
 	let mobileNavOpen = false;
 
@@ -71,10 +72,26 @@
 			</nav>
 
 			<!-- Secondary Nav -->
-			<nav class="secondary-nav space-x-5">
-				<a on:click={navItemClicked} href="/auth/login" class="primary-nav-item">Login</a>
-				<a on:click={navItemClicked} href="/apply" class="secondary-nav-item">Apply Now</a>
-			</nav>
+			{#if !$currentUser}
+
+				<nav class="secondary-nav">
+					<a on:click={navItemClicked} href="/auth/login" class="primary-nav-item">Login</a>
+					<a on:click={navItemClicked} href="/apply" class="secondary-nav-item">Apply Now</a>
+				</nav>
+
+			{:else if $currentUser.profile.length === 0}
+				<nav class="secondary-nav">
+					<a on:click={navItemClicked} href="/apply/step2" class="secondary-nav-item">Complete application</a>
+				</nav>
+			{:else}
+				<nav class="secondary-nav">
+					<a on:click={navItemClicked} href="/dashboard" class="secondary-nav-item">Dashboard</a>
+				</nav>
+			{/if}
+<!--			<nav class="secondary-nav space-x-5">-->
+<!--				<a on:click={navItemClicked} href="/auth/login" class="primary-nav-item">Login</a>-->
+<!--				<a on:click={navItemClicked} href="/apply" class="secondary-nav-item">Apply Now</a>-->
+<!--			</nav>-->
 
 			<!-- Mobile Nav Toggler -->
 			<button on:click={toggleNav} class="mobile-nav-toggle" aria-label="toggle menu">
@@ -114,8 +131,15 @@
 			<a on:click={navItemClicked} href="/#faq" class="mobile-nav-item">FAQs</a>
 			<a on:click={navItemClicked} href="/#tuition" class="mobile-nav-item">Tuition</a>
 			<a on:click={navItemClicked} href="/#about" class="mobile-nav-item">About Us</a>
-			<a on:click={navItemClicked} href="/auth/login" class="mobile-nav-item">Login</a>
-			<a on:click={navItemClicked} href="/apply" class="mobile-nav-item-btn">Apply Now</a>
+			{#if !$currentUser}
+				<a on:click={navItemClicked} href="/auth/login" class="mobile-nav-item">Login</a>
+				<a on:click={navItemClicked} href="/apply" class="mobile-nav-item-btn">Apply Now</a>
+			{:else if $currentUser.profile.length === 0}
+				<a on:click={navItemClicked} href="/apply/step2" class="mobile-nav-item-btn">Complete application</a>
+			{:else}
+
+				<a on:click={navItemClicked} href="/dashboard" class="mobile-nav-item-btn">Dashboard</a>
+			{/if}
 		</div>
 	</div>
 </div>

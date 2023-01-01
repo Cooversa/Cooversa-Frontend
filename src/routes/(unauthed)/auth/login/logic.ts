@@ -5,11 +5,9 @@ import {goto} from "$app/navigation";
 import pocketbase from "$lib/pocketbase";
 import {ClientResponseError} from "pocketbase";
 
-
 export const login = async (value: LoginValue) => {
     try {
         await pocketbase.collection('users').authWithPassword(value.email, value.password)
-        await goto('/apply/step2')
     } catch (error) {
 
         if (error instanceof ClientResponseError && error.status === 400) {

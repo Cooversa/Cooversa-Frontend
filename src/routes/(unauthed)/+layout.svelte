@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Navbar from '$lib/shared/components/Navbar.svelte';
-	import '../styles/app.css';
+	import '../../styles/app.css';
 	import Footer from '$lib/shared/components/Footer.svelte';
 	import alerts from '$lib/shared/store/alert.ts';
 	import { onDestroy, onMount } from 'svelte';

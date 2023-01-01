@@ -1,0 +1,64 @@
+<script lang="ts">
+    import {onMount} from "svelte";
+
+    export let data: any;
+
+    let {lesson, nextLesson, previousLesson} = data;
+    let poster = lesson.featured_image;
+    let video_url = lesson.video_url;
+
+    $: {
+        lesson = data.lesson
+        poster = lesson.featured_image
+        video_url = lesson.video_url
+        nextLesson = data.nextLesson
+        previousLesson = data.previousLesson
+    }
+
+
+    onMount(() => {
+        const player = new Plyr('#player');
+    })
+
+</script>
+
+<svelte:head>
+    <title>{lesson.name}</title>
+</svelte:head>
+
+<main>
+    <h1 class="text-4xl font-bold mb-10">{lesson.name}</h1>
+    {#if lesson.video_url}
+        <div class="mb-10 max-w-5xl">
+
+            <video class="player" id="player" playsinline controls data-poster={poster}>
+                <source src={video_url} type="video/mp4" />
+            </video>
+
+        </div>
+    {/if}
+    <article class="prose max-w-none">{@html lesson.content}</article>
+    <div class="flex justify-between mt-5">
+        <div class="w-1/4  overflow-hidden">
+            {#if previousLesson}
+                <div class="bg-primary px-3 py-2 rounded-full text-white flex items-center space-x-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 rotate-180">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+                    </svg>
+                    <a target="_self" class="w-full line-clamp-1 " href="/lessons/{previousLesson.slug}">{previousLesson.name}</a>
+                </div>
+            {/if}
+        </div>
+        <div class="w-1/4 overflow-hidden">
+            {#if nextLesson}
+                <div class="space-x-5 bg-primary px-3 py-2 rounded-full text-white flex items-center">
+                    <a target="_self" class="w-full line-clamp-1 " href="/lessons/{nextLesson.slug}">{nextLesson.name}</a>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+                    </svg>
+
+                </div>
+            {/if}
+        </div>
+    </div>
+</main>

@@ -6,10 +6,10 @@
 <style>
     .loader {
         position: fixed;
-        width: 50%;
+        /*width: 50%;*/
         bottom: 0;
         right: 0;
-        margin: 50px;
+        margin: 10px;
         display: grid;
         place-items: center;
         z-index: 9999;

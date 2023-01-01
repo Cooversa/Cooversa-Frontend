@@ -2,7 +2,7 @@
 // for information about these interfaces
 // and what to do when importing types
 import type {User} from "$lib/types/user.type";
-import Pocketbase from "$lib/pocketbase";
+import PocketBase, {Admin, Record} from "pocketbase";
 
 declare namespace App {
 	// interface Error {}
@@ -12,4 +12,14 @@ declare namespace App {
     }
 	// interface PageData {}
 	// interface Platform {}
+}
+
+
+declare global {
+    declare namespace App {
+        interface Locals {
+            pb: PocketBase,
+            user: Record | Admin | null
+        }
+    }
 }
