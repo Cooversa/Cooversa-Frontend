@@ -12,6 +12,14 @@
 	import { ClientResponseError } from 'pocketbase';
 	import {browser} from "$app/environment";
 
+	import {navigating} from "$app/stores";
+	import loading from "$lib/shared/store/loading";
+	import Loading from "$lib/shared/components/Loading.svelte";
+
+	$: {
+		loading.set(!!$navigating);
+	};
+
 	let alertsList: AlertType[] = [];
 
 	let unsub = alerts.subscribe((data) => {
@@ -47,6 +55,9 @@
 </script>
 
 <div class="flex flex-col h-screen">
+	{#if ($loading)}
+		<Loading />
+	{/if}
 	{#if alertsList.length}
 		<AlertsList>
 			{#each alertsList as alert}

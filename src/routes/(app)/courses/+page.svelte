@@ -22,7 +22,7 @@
     <h1 class="text-3xl font-semibold">
         All Courses
     </h1>
-    <div class="pt-10 px-5">
+    <div class="pt-10 ">
         <CoursesGrid {courses}/>
     </div>
 </main>
