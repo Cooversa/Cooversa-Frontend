@@ -50,7 +50,7 @@
             {#if (title)}
                 <h3 class="font-bold">{title}</h3>
             {/if}
-            <p>{content}</p>
+            <p>{@html content}</p>
         </div>
     </div>
 </div>

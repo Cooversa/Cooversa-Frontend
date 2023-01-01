@@ -2,6 +2,9 @@
     import schema from './schema';
     import type { LoginValue } from "./schema";
     import { login } from "./logic";
+    import pocketbase from "$lib/pocketbase";
+    import {goto} from "$app/navigation";
+    import {browser} from "$app/environment";
 
     let values: LoginValue = {
         email: '',
@@ -18,6 +21,17 @@
         try {
             await schema.validate(values, { abortEarly: false });
             await login(values);
+            const user = pocketbase.authStore.model;
+            if (browser) {
+                console.log('browser');
+                document.cookie = pocketbase.authStore.exportToCookie();
+            }
+
+            if (user?.profile) {
+                await goto('/dashboard')
+            } else {
+                await goto('/apply/step2')
+            }
             errors = {};
 
         } catch (error) {

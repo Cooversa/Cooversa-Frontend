@@ -46,8 +46,16 @@
 
     html {
         font-family: Gilmer, sans-serif;
+        color: #1A1A1A;
     }
 
+    * {
+        box-sizing: border-box;
+    }
+
+    :root {
+        --plyr-color-main: #5c57ff;
+    }
 
     .form {
         margin-top: 40px;
