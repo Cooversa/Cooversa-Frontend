@@ -5,7 +5,7 @@
 
     <div class="shadow flex items-center main justify-end p-5 px-10">
         <div>
-            <h2 class="font-semibold text-lg">Hello {$currentUserProfile.first_name}!</h2>
+            <h2 class="font-semibold text-lg">Hello {$currentUserProfile.first_name || "Student" }!</h2>
         </div>
 <!--        <div class="flex items-center space-x-5">-->
 <!--            <a href="/notifications" class="relative">-->
