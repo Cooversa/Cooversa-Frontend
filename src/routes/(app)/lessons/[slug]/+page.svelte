@@ -28,15 +28,17 @@
 
 <main>
     <h1 class="text-4xl font-bold mb-10">{lesson.name}</h1>
-    {#if lesson.video_url}
-        <div class="mb-10 max-w-5xl">
+        <div class="mb-10 max-w-full rounded overflow-hidden mx-auto">
+            {#if lesson.video_url}
 
             <video class="player" id="player" playsinline controls data-poster={poster}>
                 <source src={video_url} type="video/mp4" />
             </video>
+            {:else }
+                <img src={poster} alt={lesson.name} class="w-full">
+            {/if}
 
         </div>
-    {/if}
     <article class="prose max-w-none">{@html lesson.content}</article>
     <div class="flex justify-between mt-5">
         <div class="w-1/4  overflow-hidden">
