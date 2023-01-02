@@ -62,7 +62,7 @@
     <div class="image-wrapper md:my-10 my-5 max-w-full rounded overflow-hidden mx-auto">
         <img class="image" src={pocketbase.getFileUrl(course, course.featured_image)}>
     </div>
-    <article class="md:prose prose-sm max-w-none">{@html course.description}</article>
+    <article class="md:prose prose-sm max-w-none" style="max-width: none;">{@html course.description}</article>
     <!-- Modules -->
     <div class="mt-10">
         <h2 class="text-2xl font-semibold">Lessons</h2>
