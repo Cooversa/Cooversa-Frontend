@@ -27,7 +27,7 @@
 </svelte:head>
 
 <main>
-    <h1 class="text-4xl font-bold mb-10">{lesson.name}</h1>
+    <h1 class="md:text-4xl text-2xl font-bold mb-10">{lesson.name}</h1>
         <div class="mb-10 max-w-full rounded overflow-hidden mx-auto">
             {#if lesson.video_url}
 
@@ -39,9 +39,9 @@
             {/if}
 
         </div>
-    <article class="prose max-w-none">{@html lesson.content}</article>
+    <article class="md:prose prose-sm max-w-none">{@html lesson.content}</article>
     <div class="flex justify-between mt-5">
-        <div class="w-1/4  overflow-hidden">
+        <div class="md:w-1/4 w-1/2  overflow-hidden">
             {#if previousLesson}
                 <div class="bg-primary px-3 py-2 rounded-full text-white flex items-center space-x-5">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 rotate-180">
@@ -51,7 +51,7 @@
                 </div>
             {/if}
         </div>
-        <div class="w-1/4 overflow-hidden">
+        <div class="md:w-1/4 w-1/2 overflow-hidden">
             {#if nextLesson}
                 <div class="space-x-5 bg-primary px-3 py-2 rounded-full text-white flex items-center">
                     <a target="_self" class="w-full line-clamp-1 " href="/lessons/{nextLesson.slug}">{nextLesson.name}</a>

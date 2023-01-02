@@ -3,9 +3,15 @@
 </script>
 
 
-    <div class="shadow flex items-center main justify-end p-5 px-10">
+    <div class="shadow z-[99999999] bg-white flex items-center md:relative fixed top-0 w-screen main justify-between md:justify-end p-5 md:px-10">
+        <div class="md:hidden">
+            <a href="/dashboard">
+
+                <img src="/transparent-icon.svg" width="100px" alt="">
+            </a>
+        </div>
         <div>
-            <h2 class="font-semibold text-lg">Hello {$currentUserProfile.first_name || "Student" }!</h2>
+            <h2 class="font-medium md:font-semibold md:text-lg">Hello {$currentUserProfile.first_name || "Student" }!</h2>
         </div>
 <!--        <div class="flex items-center space-x-5">-->
 <!--            <a href="/notifications" class="relative">-->

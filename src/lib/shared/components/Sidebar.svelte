@@ -88,7 +88,8 @@
 	})
 </script>
 
-<aside class="bg-white fixed bottom-0 top-0 p-5 py-8 shadow {isOpen ? 'w-72' : 'w-16'} transition-all">
+<aside class="bg-white fixed bottom-0 md:top-0 bottom-0 right-0 left-0 flex md:flex-col md:px-5 md:py-8 px-10 py-5 shadow {isOpen ? 'md:w-72' : 'md:w-16'} w-screen transition-all">
+
 	<svg
 		class:rotate-180={!isOpen}
 		on:click={toggleOpen}
@@ -97,7 +98,7 @@
 		viewBox="0 0 24 24"
 		stroke-width="4"
 		stroke="currentColor"
-		class="w-6 h-6 bg-primary text-white rounded-full p-1 absolute -right-3 border cursor-pointer"
+		class="w-6 h-6 bg-primary text-white hidden md:block rounded-full p-1 absolute -right-3 border cursor-pointer"
 	>
 		<path
 			stroke-linecap="round"
@@ -107,7 +108,7 @@
 	</svg>
 
 	<!-- Logo -->
-	<div >
+	<div class="hidden md:flex">
 		<a href="/dashboard">
 			<img
 					src={isOpen ? '/transparent-icon.svg' : '/transparent-c.svg'}
@@ -117,23 +118,25 @@
 		</a>
 	</div>
 
-	<div class="flex flex-col justify-between mt-10 text-gray-700">
+	<div class="md:mt-10 w-full text-gray-700">
 
 		<!-- Navigation -->
-		<nav class=" space-y-6">
+		<nav class="md:space-y-6 w-full flex justify-between md:flex-col ">
 			{#each pages as nav}
-				<a class="flex items-center" href={nav.url}>
-					<div class="inline-block">{@html nav.url === $page.url.pathname ? nav.activeSvg : nav.svg}</div>
-					<div class="ml-3 text-[14px] duration-200 font-medium {!isOpen && 'scale-0'}">{nav.name}</div>
-				</a>
+				<div>
+					<a class="flex items-center" href={nav.url}>
+						<div class="inline-block">{@html nav.url === $page.url.pathname ? nav.activeSvg : nav.svg}</div>
+						<div class="ml-3 hidden md:flex text-[14px] duration-200 font-medium {!isOpen && 'scale-0'}">{nav.name}</div>
+					</a>
+				</div>
 			{/each}
 			<button on:click={logout} class="flex items-center">
-				<span class="inline-block">
+				<span class="">
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
   						<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
 					</svg>
 				</span>
-				<span class="ml-3 text-[14px] duration-200 font-medium {!isOpen && 'scale-0'}">Logout</span>
+				<span class="ml-3 text-[14px] duration-200 hidden md:flex	 font-medium {!isOpen && 'scale-0'}">Logout</span>
 			</button>
 		</nav>
 

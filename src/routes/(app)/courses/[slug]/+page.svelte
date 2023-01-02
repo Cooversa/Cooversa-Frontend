@@ -58,11 +58,11 @@
 </svelte:head>
 
 <div>
-    <h1 class="text-3xl font-semibold ">{course.name}</h1>
-    <div class="image-wrapper my-10 max-w-full rounded overflow-hidden mx-auto">
+    <h1 class="md:text-3xl text-2xl font-semibold ">{course.name}</h1>
+    <div class="image-wrapper md:my-10 my-5 max-w-full rounded overflow-hidden mx-auto">
         <img class="image" src={pocketbase.getFileUrl(course, course.featured_image)}>
     </div>
-    <article class="prose max-w-none">{@html course.description}</article>
+    <article class="md:prose prose-sm max-w-none">{@html course.description}</article>
     <!-- Modules -->
     <div class="mt-10">
         <h2 class="text-2xl font-semibold">Modules</h2>
