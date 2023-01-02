@@ -1,43 +1,76 @@
 import pocketbase from "$lib/pocketbase";
 import type {PageLoad} from "../../../../../.svelte-kit/types/src/routes/(app)/courses/[slug]/$types";
-import {ClientResponseError, Record} from "pocketbase";
+import type {Record} from "pocketbase";
+import {ClientResponseError} from "pocketbase";
 
-const getLesson = async (slug: string) => {
-    const leesson = await pocketbase.collection("lesson").getFirstListItem(`slug="${slug}"`, {
-        expand: "module,modules.lesson"
-    });
-    return leesson;
+const getAvailability = (dateString: string) => {
+    const date = new Date(dateString);
+    if (date.toLocaleDateString() === "Invalid Date") return true;
+    const now = new Date()
+    return date <= now;
 }
 
-const getNextAndPreviousLessons = async (currentLessonOrderNumber: number) => {
+const getLesson = async (slug: string) => {
+    const lesson = await pocketbase.collection("lesson").getFirstListItem(`slug="${slug}"`, {
+        expand: "module,modules.lesson"
+    });
+    return lesson;
+}
+
+const getNextAndPreviousLessons = async (currentLessonOrderNumber: number, moduleId: string) => {
     type Result = {
-        nextLesson: Record | null,
-        previousLesson: Record | null
+        nextLesson: Record | undefined,
+        previousLesson: Record | undefined
     }
     const result: Result = {
-        nextLesson: null,
-        previousLesson: null
+        nextLesson: undefined,
+        previousLesson: undefined
     }
 
-    try {
-        const nextLesson = await pocketbase.collection("lesson").getFirstListItem(`order=${currentLessonOrderNumber+1}`)
-        if (nextLesson) {
-            result.nextLesson = nextLesson
-        }
-    } catch (e) {
-        if (e instanceof ClientResponseError && e.status === 404) {
-            result.nextLesson = null
+    const currentModule = await pocketbase.collection("module").getFirstListItem(`id="${moduleId}"`)
+
+    const allModuleLessons =  await pocketbase.collection("lesson").getList(1, 100, {
+        filter: `module="${moduleId}"`,
+    })
+
+
+
+
+
+    result.nextLesson = allModuleLessons.items.find((lesson) => lesson.order === currentLessonOrderNumber + 1)
+    result.previousLesson = allModuleLessons.items.find((lesson) => lesson.order === currentLessonOrderNumber - 1)
+
+    if (!result.nextLesson) {
+        try {
+            const nextModule = await pocketbase.collection("module").getFirstListItem(`order=${currentModule.order + 1}`)
+            const nextModuleLessons = await pocketbase.collection("lesson").getList(1, 100, {
+                filter: `module="${nextModule.id}"`,
+            })
+            if (getAvailability(nextModule.available_at)) {
+                result.nextLesson = nextModuleLessons.items.find((lesson) => lesson.order === 1)
+            }
+        } catch (e) {
+            if (e instanceof ClientResponseError && e.status === 404) {
+                result.nextLesson = undefined
+            }
         }
     }
 
-    try {
-        const previousLesson = await pocketbase.collection("lesson").getFirstListItem(`order=${currentLessonOrderNumber-1}`)
-        if (previousLesson) {
-            result.previousLesson = previousLesson
-        }
-    } catch (e) {
-        if (e instanceof ClientResponseError && e.status === 404) {
-            result.previousLesson = null
+    if (!result.previousLesson) {
+        try {
+            console.log(currentModule.order)
+            const previousModule = await pocketbase.collection("module").getFirstListItem(`order=${currentModule.order - 1}`)
+            const previousModuleLessons = await pocketbase.collection("lesson").getList(1, 100, {
+                filter: `module="${previousModule.id}"`,
+            })
+            if (getAvailability(previousModule.available_at)) {
+                result.previousLesson = previousModuleLessons.items.find((lesson) => lesson.order === previousModuleLessons.items.length)
+            }
+        } catch (e) {
+            console.log(e)
+            if (e instanceof ClientResponseError && e.status === 404) {
+                result.previousLesson = undefined
+            }
         }
     }
 
@@ -46,7 +79,7 @@ const getNextAndPreviousLessons = async (currentLessonOrderNumber: number) => {
 
 export const load: PageLoad = async ({ params }) => {
     const lesson = await getLesson(params.slug);
-    const {nextLesson, previousLesson} = await getNextAndPreviousLessons(lesson.order)
+    const {nextLesson, previousLesson} = await getNextAndPreviousLessons(lesson.order, lesson.module)
 
     return {
         lesson,
