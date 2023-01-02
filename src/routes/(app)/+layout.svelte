@@ -56,7 +56,7 @@
 
 <div class="relative min-h-screen md:flex">
     <Sidebar on:navState={setSidebarState}/>
-    <div class=" my-16 p w-full {isSidebarOpen ? 'md:ml-72' : 'md:ml-16'} ml-0 transition-all">
+    <div class=" my-16 md:my-0 p w-full {isSidebarOpen ? 'md:ml-72' : 'md:ml-16'} ml-0 transition-all">
         <AppNavbar/>
         <div class="p-7">
             {#if $loading}

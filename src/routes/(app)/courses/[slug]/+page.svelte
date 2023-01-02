@@ -65,7 +65,7 @@
     <article class="md:prose prose-sm max-w-none">{@html course.description}</article>
     <!-- Modules -->
     <div class="mt-10">
-        <h2 class="text-2xl font-semibold">Modules</h2>
+        <h2 class="text-2xl font-semibold">Lessons</h2>
 
         <!-- Accordion -->
         <div class="accordion mt-5">
