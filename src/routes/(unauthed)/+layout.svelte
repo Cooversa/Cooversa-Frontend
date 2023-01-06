@@ -47,7 +47,7 @@
 		if (browser) {
 			await validateUserOrLogout();
 			pocketbase.authStore.onChange((token, model) => {
-				console.log('authStore.onChange', token, model);
+				// console.log('authStore.onChange', token, model);
 				currentUser.set(model);
 			});
 		}

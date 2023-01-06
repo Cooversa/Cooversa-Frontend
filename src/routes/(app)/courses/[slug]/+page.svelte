@@ -71,7 +71,7 @@
         <div class="accordion mt-5">
             {#each modules as module}
                 <div class="accordion-items" class:active={activeModuleId === module.id}>
-                    <div class="accordion-header cursor-pointer" on:click={() => changeActiveModule(module.id, module)} on:keydown={() => console.log('Key Down')}>
+                    <div class="accordion-header cursor-pointer" on:click={() => changeActiveModule(module.id, module)} on:keydown={() => ('Key Down')}>
                         <h3 class="accordion-title">{module.name}</h3>
                         {#if getAvailability(module.available_at)}
                             <button class="accordion-button" aria-label="Expand Accordion" aria-expanded="false">

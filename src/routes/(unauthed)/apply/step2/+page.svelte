@@ -158,7 +158,6 @@
     };
 
     onMount(() => {
-        console.log($currentUser);
         if (browser) {
             if ($currentUser === null) {
                 goto('/auth/login');

@@ -23,7 +23,6 @@
             await login(values);
             const user = pocketbase.authStore.model;
             if (browser) {
-                console.log('browser');
                 document.cookie = pocketbase.authStore.exportToCookie();
             }
 
