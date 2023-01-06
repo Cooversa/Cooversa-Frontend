@@ -2,19 +2,18 @@
     import '../../styles/app.css'
     import AppNavbar from "$lib/shared/components/AppNavbar.svelte";
     import Sidebar from "$lib/shared/components/Sidebar.svelte";
-    import {currentUser} from "$lib/stores/auth";
+    import {currentUser, initCurrentUser} from "$lib/stores/auth";
     import {onDestroy, onMount} from "svelte";
-    import {browser} from "$app/environment";
-    import {goto} from "$app/navigation";
-    import pocketbase from "$lib/pocketbase";
 
-    import alerts from "$lib/shared/store/alert";
+    import alerts, {makeAlert} from "$lib/shared/store/alert";
     import AlertsList from '$lib/shared/components/AlertsList.svelte';
     import Alert from '$lib/shared/components/Alert.svelte';
     import type { Alert as AlertType } from '$lib/shared/store/alert.ts';
     import loading from "$lib/shared/store/loading";
     import {navigating} from "$app/stores";
     import Loading from "$lib/shared/components/Loading.svelte";
+    import {browser} from "$app/environment";
+    import {goto} from "$app/navigation";
 
 
     let isSidebarOpen = true;
@@ -35,21 +34,29 @@
         unsub();
     });
 
-    onMount(async () => {
-        if (browser) {
-            if (!$currentUser) {
-              await goto('/auth/login')
-            }
+    let isReady = false;
 
-            await pocketbase.authStore.onChange((token, model) => {
-                if (!token) {
-                    goto('/auth/login')
-                }
+    const checkIfEnrolled = () => {
+        if($currentUser && !$currentUser.schoolId) {
+            goto('/school');
+            makeAlert({
+                type: 'warning',
+                title: 'School not set',
+                content: 'Please enroll in a school to continue'
             })
         }
+    }
+
+    $: if($navigating) {
+        checkIfEnrolled();
+    }
+
+    onMount(async () => {
+        await initCurrentUser();
     })
 
 </script>
+
 
 
 

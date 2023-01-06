@@ -11,17 +11,17 @@
     import {makeAlert} from "$lib/shared/store/alert";
     import {browser} from "$app/environment";
     import LoadingSvg from "$lib/shared/components/LoadingSvg.svelte";
+    import type {CreateProfile} from "$lib/client/users/types";
 
-    let values: CreateProfileType = {
-        first_name: "",
-        last_name: "",
+    let values: CreateProfile = {
+        firstName: "",
+        lastName: "",
         age: 18,
-        phone_number: "",
+        phoneNumber: "",
         gender: '',
         state: "",
         country: "",
-        user: $currentUser?.id,
-        paid: false,
+        paymentReference: '',
     };
 
     let coupon;
@@ -139,9 +139,8 @@
         loading = true;
         try {
             if (response) {
-                await verifyPayment(response.reference)
+                values.paymentReference = response.reference;
             }
-            values.paid = true;
             await completeRegistration(values, $currentUser.email, coupon);
         } catch (error) {
 
@@ -157,11 +156,10 @@
         }
     };
 
-    onMount(() => {
-        console.log($currentUser);
+    onMount(async () => {
         if (browser) {
-            if ($currentUser === null) {
-                goto('/auth/login');
+            if (!$currentUser) {
+                await goto('/apply');
             }
         }
     })
@@ -188,10 +186,10 @@
                 type="text"
                 name="first_name"
                 id="first_name"
-                bind:value={values.first_name}
+                bind:value={values.firstName}
             />
             {#if errors.first_name}
-                <p class="form-error">{errors.first_name}</p>
+                <p class="form-error">{errors.firstName}</p>
             {/if}
         </div>
 
@@ -202,10 +200,10 @@
                 type="text"
                 name="last_name"
                 id="last_name"
-                bind:value={values.last_name}
+                bind:value={values.lastName}
             />
             {#if errors.last_name}
-                <p class="form-error">{errors.last_name}</p>
+                <p class="form-error">{errors.lastName}</p>
             {/if}
         </div>
 
@@ -231,10 +229,10 @@
                 name="phone_number"
                 id="phone_number"
                 placeholder="e.g +234 812 345 6789"
-                bind:value={values.phone_number}
+                bind:value={values.phoneNumber}
             />
             {#if errors.phone_number}
-                <p class="form-error">{errors.phone_number}</p>
+                <p class="form-error">{errors.phoneNumber}</p>
             {/if}
         </div>
 

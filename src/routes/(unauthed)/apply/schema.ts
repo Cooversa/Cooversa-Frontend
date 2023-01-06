@@ -1,13 +1,9 @@
 import * as yup from 'yup';
 
-type Role = 'student' | 'teacher';
-
 export type CreateUserType = {
 	email: string;
 	password: string;
 	passwordConfirm: string;
-	role: Role;
-	is_active: boolean;
 };
 
 const schema = yup.object().shape({

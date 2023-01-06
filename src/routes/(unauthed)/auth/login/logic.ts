@@ -4,16 +4,19 @@ import {makeAlert} from "$lib/shared/store/alert";
 import {goto} from "$app/navigation";
 import pocketbase from "$lib/pocketbase";
 import {ClientResponseError} from "pocketbase";
+import {loginUser} from "$lib/client";
+import {AxiosError} from "axios";
 
 export const login = async (value: LoginValue) => {
     try {
-        await pocketbase.collection('users').authWithPassword(value.email, value.password)
+        const user = await loginUser(value);
+        return user;
     } catch (error) {
 
-        if (error instanceof ClientResponseError && error.status === 400) {
+        if (error instanceof AxiosError) {
             makeAlert({
                 title: "Login failed",
-                content: "Invalid email or password",
+                content: error.response?.data.message || "Something went wrong, please try again later!",
                 type: "error",
             })
             return;

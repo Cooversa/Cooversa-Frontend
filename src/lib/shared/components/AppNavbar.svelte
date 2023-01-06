@@ -1,8 +1,11 @@
 <script lang="ts">
-    import {currentUserProfile} from "$lib/stores/auth";
+    import {currentUser, initCurrentUser} from "$lib/stores/auth";
+    import {onMount} from "svelte";
+
+    onMount(async () => {
+        await initCurrentUser()
+    })
 </script>
-
-
     <div class="shadow z-[99999999] bg-white flex items-center md:relative fixed top-0 w-screen md:w-full main justify-between md:justify-end p-5 md:px-10">
         <div class="md:hidden">
             <a href="/dashboard">
@@ -10,8 +13,12 @@
                 <img src="/transparent-icon.svg" width="100px" alt="">
             </a>
         </div>
-        <div>
-            <h2 class="font-medium md:font-semibold md:text-lg">Hello {$currentUserProfile.first_name || "Student" }!</h2>
+        <div class="hidden md:flex">
+            {#if $currentUser}
+                <h2 class="font-medium md:font-semibold md:text-lg">Hello {$currentUser.profile.firstName}!</h2>
+            {:else}
+                <h2 class="font-medium md:font-semibold md:text-lg">Hello Student!</h2>
+            {/if}
         </div>
 <!--        <div class="flex items-center space-x-5">-->
 <!--            <a href="/notifications" class="relative">-->

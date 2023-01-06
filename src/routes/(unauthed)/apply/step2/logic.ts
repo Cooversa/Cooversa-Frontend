@@ -4,6 +4,8 @@ import pocketbase from '$lib/pocketbase';
 import { ClientResponseError } from 'pocketbase';
 import { goto } from '$app/navigation';
 import axios, { AxiosError } from 'axios';
+import {createProfile} from "$lib/client";
+import type {CreateProfile} from "$lib/client/users/types";
 
 
 export const generateTransactionRef = () => {
@@ -86,36 +88,26 @@ export const sendWelcomeEmail = async (email: string, name: string) => {
 	}
 }
 
-export const completeRegistration = async (profile: CreateProfileType, email: string, coupon = '') => {
+export const completeRegistration = async (data: CreateProfile, email: string, coupon = '') => {
 	try {
 		if (coupon.length > 0) {
 			await incrementCouponUsage(coupon);
 		}
-		const response = await pocketbase.collection('profile').create(profile);
-
-		// Update the user profile
-		await pocketbase
-			.collection('users')
-			.update(profile.user, { is_active: true, profile: response.id });
+		const profile = await createProfile(data);
+		console.log('profile', profile);
 
 		// Send welcome email
-		await sendWelcomeEmail(email, profile.first_name);
+		await sendWelcomeEmail(email, data.firstName);
 
 		// Redirect to success page
-		await goto('/apply/success');
+		// await goto('/apply/success');
 	} catch (error) {
-		if (error instanceof ClientResponseError) {
-			console.log(error.data);
-			Object.keys(error.data.data).forEach((key) => {
-				makeAlert({
-					title: 'Error',
-					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-					// @ts-ignore
-					content: error.data.data[key].message,
-					type: 'error'
-				});
-			});
-			console.log(error.data.data);
+		if (error instanceof AxiosError) {
+			makeAlert({
+				type: 'error',
+				title: 'Signup Error',
+				content: error.response?.data.message || 'Something went wrong',
+			})
 			return;
 		}
 		makeAlert({
@@ -123,7 +115,6 @@ export const completeRegistration = async (profile: CreateProfileType, email: st
 			content: 'Something went wrong, please try again later!',
 			type: 'error'
 		});
-		console.log('err', error);
 	}
 };
 

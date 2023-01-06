@@ -5,6 +5,9 @@
     import pocketbase from "$lib/pocketbase";
     import {goto} from "$app/navigation";
     import {browser} from "$app/environment";
+    import {getLoggedInUser} from "$lib/client";
+    import {onMount} from "svelte";
+    import {currentUser, initCurrentUser} from "$lib/stores/auth";
 
     let values: LoginValue = {
         email: '',
@@ -20,14 +23,10 @@
         loading = true;
         try {
             await schema.validate(values, { abortEarly: false });
-            await login(values);
-            const user = pocketbase.authStore.model;
-            if (browser) {
-                console.log('browser');
-                document.cookie = pocketbase.authStore.exportToCookie();
-            }
+            const user = await login(values);
 
-            if (user?.profile) {
+
+            if (user.profile) {
                 await goto('/dashboard')
             } else {
                 await goto('/apply/step2')
@@ -45,6 +44,21 @@
             loading = false;
         }
     };
+
+    onMount(async () => {
+        await initCurrentUser();
+
+        if (browser) {
+            const user = $currentUser;
+            if (user) {
+                if (user.profile) {
+                    await goto('/dashboard')
+                } else {
+                    await goto('/apply/step2')
+                }
+            }
+        }
+    })
 </script>
 
 <svelte:head>

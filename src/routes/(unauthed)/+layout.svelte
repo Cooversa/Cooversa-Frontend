@@ -8,7 +8,7 @@
 	import Alert from '$lib/shared/components/Alert.svelte';
 	import type { Alert as AlertType } from '$lib/shared/store/alert.ts';
 	import pocketbase from '$lib/pocketbase';
-	import { currentUser } from '$lib/stores/auth';
+	import {currentUser, initCurrentUser} from '$lib/stores/auth';
 	import { ClientResponseError } from 'pocketbase';
 	import {browser} from "$app/environment";
 
@@ -30,27 +30,8 @@
 		unsub();
 	});
 
-	const validateUserOrLogout = async () => {
-		try {
-			await pocketbase.collection('users').getOne($currentUser?.id || '');
-		} catch (err) {
-			if (err instanceof ClientResponseError && err.status === 404) {
-				await pocketbase.authStore.clear();
-				currentUser.set(null);
-				return;
-			}
-			throw err;
-		}
-	};
-
 	onMount(async () => {
-		if (browser) {
-			await validateUserOrLogout();
-			pocketbase.authStore.onChange((token, model) => {
-				console.log('authStore.onChange', token, model);
-				currentUser.set(model);
-			});
-		}
+		await initCurrentUser()
 	});
 </script>
 

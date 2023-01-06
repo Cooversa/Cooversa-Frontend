@@ -8,8 +8,6 @@
 		email: '',
 		password: '',
 		passwordConfirm: '',
-		role: 'student',
-		is_active: false,
 	};
 
 
@@ -35,6 +33,8 @@
 			loading = false;
 		}
 	};
+
+
 </script>
 
 <svelte:head>

@@ -5,23 +5,23 @@
     import {navigating} from "$app/stores";
 
 
-    const getCourses = async () => {
-        if (!$navigating) {
-            return (await pocketbase.collection("course").getList(1, 100, {
-                sort: "order",
-            })).items;
-        }
-    };
-
-    let courses = [];
-
-    $: {
-        if (!$navigating) {
-            getCourses().then((data) => {
-                courses = data;
-            });
-        }
-    };
+    // const getCourses = async () => {
+    //     if (!$navigating) {
+    //         return (await pocketbase.collection("course").getList(1, 100, {
+    //             sort: "order",
+    //         })).items;
+    //     }
+    // };
+    //
+    // let courses = [];
+    //
+    // $: {
+    //     if (!$navigating) {
+    //         getCourses().then((data) => {
+    //             courses = data;
+    //         });
+    //     }
+    // };
 
 </script>
 
@@ -34,5 +34,5 @@
 <Banner />
 
 <div class="container pt-16">
-    <CoursesGrid {courses} />
+<!--    <CoursesGrid {courses} />-->
 </div>
