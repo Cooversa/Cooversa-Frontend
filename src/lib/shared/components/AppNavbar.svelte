@@ -11,7 +11,7 @@
             </a>
         </div>
         <div>
-            <h2 class="font-medium md:font-semibold md:text-lg">Hello {$currentUserProfile.first_name || "Student" }!</h2>
+            <h2 class="font-medium md:font-semibold md:text-lg">Hello <span class="text-primary *-primary">{$currentUserProfile.first_name || "Student" }!</span></h2>
         </div>
 <!--        <div class="flex items-center space-x-5">-->
 <!--            <a href="/notifications" class="relative">-->
