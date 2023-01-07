@@ -2,7 +2,7 @@
 
     <div style="z-index: 9999; ">
         <h1 class="md:text-3xl text-xl mb-5 font-bold">Welcome to the Cooversa LMS!</h1>
-        <p>You are now enrolled in the Fundamental Track. Let's get started on your journey to becoming a top-notch software engineer.</p>
+        <p>You are now enrolled in the Fundamental Track. Let's get you started on your journey to becoming a top-notch software engineer.</p>
     </div>
 </div>
 
@@ -19,6 +19,11 @@
             /*background-color: #5C57FF;*/
             /*color: #F5F5F5;*/
             background-size: cover;
+        }
+    }
+    @media (max-width: 450px){
+        .wrapper{
+            background-repeat: no-repeat;
         }
     }
 </style>

@@ -13,7 +13,7 @@
         }
     };
 
-    let courses = [];
+    let courses:any = [];
 
     $: {
         if (!$navigating) {
