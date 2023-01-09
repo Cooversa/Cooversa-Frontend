@@ -10,6 +10,9 @@
 	import {page} from "$app/stores";
 	import {browser} from "$app/environment";
 	import pocketbase from "$lib/pocketbase";
+	import {logoutUser} from "$lib/client";
+	import {goto} from "$app/navigation";
+	import {initCurrentUser} from "$lib/stores/auth";
 
 	const dispatchNavState = () => {
 		dispatch("navState", {
@@ -23,7 +26,11 @@
 	};
 
 	const logout = async () => {
-		await pocketbase.authStore.clear();
+		await logoutUser();
+		await initCurrentUser();
+		if (browser) {
+			await goto("/auth/login");
+		}
 	}
 
 	const pages = [

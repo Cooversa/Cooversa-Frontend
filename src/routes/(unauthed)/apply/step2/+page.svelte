@@ -141,7 +141,7 @@
             if (response) {
                 values.paymentReference = response.reference;
             }
-            await completeRegistration(values, $currentUser.email, coupon);
+            await completeRegistration(values, coupon);
         } catch (error) {
 
             errors = error.inner.reduce((acc, err) => {

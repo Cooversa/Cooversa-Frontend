@@ -1,11 +1,33 @@
 <script lang="ts">
-    import pocketbase from "$lib/pocketbase";
     import CoursesGrid from "$lib/shared/components/CoursesGrid.svelte";
+    import type {Course} from "$lib/client/schools/types";
+    import {browser} from "$app/environment";
+    import client from "$lib/client";
+    import {AxiosError} from "axios";
+    import {makeAlert} from "$lib/shared/store/alert";
 
-    const getCourses = async () => {
-        return (await pocketbase.collection("course").getList(1, 100, {
-            sort: "order",
-        })).items;
+
+    const getCourses = async (): Promise<Course[]> => {
+        if (browser) {
+            try {
+                const response = await client.get('/users/courses/all')
+                return response.data
+            } catch (e) {
+                if (e instanceof AxiosError) {
+                    makeAlert({
+                        type: "error",
+                        title: "Couldn't load courses!",
+                        content: e.response.data.message || 'Ooops, something went wrong!'
+                    })
+                    return
+                }
+                makeAlert({
+                    type: "error",
+                    title: "Couldn't load courses!",
+                    content: 'Ooops, something went wrong!'
+                })
+            }
+        }
     };
 
     let courses = getCourses();

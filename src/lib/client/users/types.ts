@@ -1,3 +1,5 @@
+import type {School} from "$lib/client/schools/types";
+
 export interface CreateUser {
     email:    string;
     password: string;
@@ -23,8 +25,7 @@ export interface User {
     status:          string;
     isEmailVerified: boolean;
     profile:         Profile;
-    schoolId:        string;
-    school:          School;
+    schools: School[];
     createdAt:       Date;
     updatedAt:       Date;
 }
@@ -46,13 +47,4 @@ export interface Profile {
 
     createdAt:        Date;
     updatedAt:        Date;
-}
-
-export interface School {
-    schoolId:    string;
-    name:        string;
-    slug:        string;
-    description: string;
-    createdAt:   Date;
-    updatedAt:   Date;
 }

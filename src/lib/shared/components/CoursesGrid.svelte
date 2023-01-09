@@ -1,6 +1,7 @@
 <script lang="ts">
     import CourseCard from "$lib/shared/components/CourseCard.svelte";
-    export let courses;
+    import type {Course} from "$lib/client/schools/types";
+    export let courses: Promise<Course[]>;
 </script>
 
 <div class="grid course-div gap-4">

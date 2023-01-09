@@ -4,16 +4,8 @@
 	export let data: any;
 
 	let { lesson, nextLesson, previousLesson } = data;
-	let poster = lesson.featured_image;
-	let video_url = lesson.video_url;
-
-	$: {
-		lesson = data.lesson;
-		poster = lesson.featured_image;
-		video_url = lesson.video_url;
-		nextLesson = data.nextLesson;
-		previousLesson = data.previousLesson;
-	}
+	let poster = lesson.featuredImage;
+	let video_url = lesson.videoUrl;
 
 	onMount(() => {
 		const player = new Plyr('#player');
@@ -39,8 +31,8 @@
 		{@html lesson.content}
 	</article>
 	<div class="flex justify-between mt-5">
-		{#if previousLesson}
-			<div class="md:w-1/4 w-1/2  overflow-hidden">
+		<div class="md:w-1/4 w-1/2  overflow-hidden">
+			{#if previousLesson}
 				<a href="/lessons/{previousLesson.slug}" target="_self">
 					<div class="bg-primary px-3 py-2 rounded-full text-white flex items-center space-x-5">
 						<svg
@@ -60,11 +52,11 @@
 						<p class="w-full line-clamp-1 ">{previousLesson.name}</p>
 					</div>
 				</a>
-			</div>
-		{/if}
+			{/if}
+		</div>
 
-		{#if nextLesson}
-			<div class="md:w-1/4 w-1/2 overflow-hidden">
+		<div class="md:w-1/4 w-1/2 overflow-hidden">
+			{#if nextLesson}
 				<a target="_self" href="/lessons/{nextLesson.slug}">
 					<div class="space-x-5 bg-primary px-3 py-2 rounded-full text-white flex items-center">
 						<p class="w-full line-clamp-1 ">{nextLesson.name}</p>
@@ -84,7 +76,7 @@
 						</svg>
 					</div>
 				</a>
-			</div>
-		{/if}
+			{/if}
+		</div>
 	</div>
 </main>

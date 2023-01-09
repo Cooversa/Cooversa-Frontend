@@ -3,12 +3,14 @@ import {createUser as register, loginUser} from "$lib/client";
 import {AxiosError} from "axios";
 import {makeAlert} from "$lib/shared/store/alert";
 import {goto} from "$app/navigation";
+import {initCurrentUser} from "$lib/stores/auth";
 
 export const createUser = async (data: CreateUserType) => {
     try {
         await register(data);
         await loginUser(data);
-
+        // Reload the current user
+        await initCurrentUser();
         await goto("/apply/step2");
     } catch (error) {
         if (error instanceof AxiosError) {

@@ -57,6 +57,23 @@
         --plyr-color-main: #5c57ff;
     }
 
+    .button {
+        padding: 10px 20px;
+        background-color: #5c57ff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .button-disabled {
+        background-color: #aba9ff;
+    }
+
     .form {
         margin-top: 40px;
     }

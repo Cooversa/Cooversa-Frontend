@@ -1,6 +1,7 @@
 <script lang="ts">
-    import pocketbase from "$lib/pocketbase.js";
     import {makeAlert} from "$lib/shared/store/alert";
+    import type {Module} from "$lib/client/schools/types";
+    import client from "$lib/client";
 
     export let data: any;
 
@@ -8,37 +9,33 @@
     const modules = data.modules;
 
     let activeModuleId = '';
-    let activeModule: any = {}
-    let activeModuleLessons = [];
-    let activeModuleLessonsLoading = false;
+    let activeModule: Module | null = null
+    let activeModuleLessons: Module[] = [];
+    let activeModuleLoading = false;
 
 
-    const changeActiveModule = (id: string, module: any) => {
-        activeModuleLessonsLoading = true;
-
-        if (activeModuleId === id) {
+    const changeActiveModule = async (moduleId: string, module: Module) => {
+        activeModuleLoading = true;
+        if (activeModuleId === moduleId) {
             activeModuleId = '';
+            activeModule = null
             activeModuleLessons = [];
-            activeModule = {}
         } else {
-            activeModuleId = id;
+            activeModuleId = moduleId;
             activeModule = module;
-            activeModuleLessons = modules.find((m: any) => {
-                return m.id === id;
-            }).expand?.lessons;
-            if (!activeModuleLessons) {
-                activeModuleLessons = [];
-            }
+            const response = await client.get(`/modules/${module.slug}/lessons`);
+            console.log(response.data);
+            activeModuleLessons = response.data;
         }
-        activeModuleLessonsLoading = false;
+        activeModuleLoading = false;
     }
 
     const showAvailabilityAlert = () => {
-        if (!(getAvailability(activeModule.available_at))) {
+        if (!(getAvailability(activeModule?.availableOn))) {
             makeAlert({
                 type: 'info',
                 title: 'Info',
-                content: `Module will be available at <span class="font-bold">${new Date(activeModule.available_at).toDateString()}</span>`
+                content: `Module will be available at <span class="font-bold">${new Date(activeModule?.availableOn || '').toDateString()}</span>`
             })
             return
         }
@@ -60,7 +57,7 @@
 <div>
     <h1 class="md:text-3xl text-2xl font-semibold ">{course.name}</h1>
     <div class="image-wrapper md:my-10 my-5 max-w-full rounded overflow-hidden mx-auto">
-        <img class="image" src={pocketbase.getFileUrl(course, course.featured_image)}>
+        <img class="image" src={course.featuredImage}>
     </div>
     <article class="md:prose prose-sm max-w-none" style="max-width: none;">{@html course.description}</article>
     <!-- Modules -->
@@ -70,8 +67,8 @@
         <!-- Accordion -->
         <div class="accordion mt-5">
             {#each modules as module}
-                <div class="accordion-items" class:active={activeModuleId === module.id}>
-                    <div class="accordion-header cursor-pointer" on:click={() => changeActiveModule(module.id, module)} on:keydown={() => console.log('Key Down')}>
+                <div class="accordion-items" class:active={activeModuleId === module.moduleId}>
+                    <div class="accordion-header cursor-pointer" on:click={() => changeActiveModule(module.moduleId, module)} on:keydown={() => console.log('Key Down')}>
                         <h3 class="accordion-title">{module.name}</h3>
                         {#if getAvailability(module.available_at)}
                             <button class="accordion-button" aria-label="Expand Accordion" aria-expanded="false">
@@ -88,10 +85,9 @@
 
                         {/if}
                     </div>
-                    <div class="accordion-body" class:active={activeModuleId === module.id}>
-                        {#if activeModuleLessonsLoading}
+                    <div class="accordion-body" class:active={activeModuleId === module.moduleId}>
+                        {#if activeModuleLoading}
                             <div class="w-full flex justify-center items-center">
-
                                 <svg
                                         class="animate-spin  h-5 w-5 text-primary"
                                         xmlns="http://www.w3.org/2000/svg"
@@ -109,13 +105,12 @@
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                                 </svg>
                             </div>
-
-                        {:else if (!activeModuleLessons.length)}
+                        {:else if !activeModuleLessons.length}
                             <p class="text-center">There are currently no lessons for this module</p>
-                        {:else }
+                        {:else}
                             <ul class="accordion-item space-y-5">
                                 {#each activeModuleLessons as lesson}
-                                    {#if !(getAvailability(activeModule.available_at))}
+                                    {#if !(getAvailability(activeModule.availableOn))}
                                         <li><a on:click|preventDefault={showAvailabilityAlert} class="cursor-pointer">{lesson.name}</a></li>
                                     {:else }
                                         <li><a href="/lessons/{lesson.slug}" >{lesson.name}</a></li>

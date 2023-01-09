@@ -33,3 +33,21 @@ export const createProfile = async (profile: CreateProfile): Promise<Profile> =>
 	const response = await client.post('/users/profile', profile);
 	return response.data;
 }
+
+export const requestVerificationEmail = async (email: string) => {
+	const response = await client.get('/users/verification/send', {
+		params: {
+			email
+		}
+	})
+	return response.data
+}
+
+export const confirmEmailVerification = async (token: string) => {
+	const response = await client.get('/users/verification/confirm', {
+		params: {
+			token
+		}
+	})
+	return response.data
+}

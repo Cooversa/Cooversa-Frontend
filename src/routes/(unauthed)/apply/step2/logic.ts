@@ -6,6 +6,7 @@ import { goto } from '$app/navigation';
 import axios, { AxiosError } from 'axios';
 import {createProfile} from "$lib/client";
 import type {CreateProfile} from "$lib/client/users/types";
+import {initCurrentUser} from "$lib/stores/auth";
 
 
 export const generateTransactionRef = () => {
@@ -88,19 +89,19 @@ export const sendWelcomeEmail = async (email: string, name: string) => {
 	}
 }
 
-export const completeRegistration = async (data: CreateProfile, email: string, coupon = '') => {
+export const completeRegistration = async (data: CreateProfile, coupon = '') => {
 	try {
 		if (coupon.length > 0) {
 			await incrementCouponUsage(coupon);
 		}
 		const profile = await createProfile(data);
-		console.log('profile', profile);
 
 		// Send welcome email
-		await sendWelcomeEmail(email, data.firstName);
+		await sendWelcomeEmail(profile.user?.email || 'Student', data.firstName);
+		await initCurrentUser();
 
 		// Redirect to success page
-		// await goto('/apply/success');
+		await goto('/apply/success');
 	} catch (error) {
 		if (error instanceof AxiosError) {
 			makeAlert({

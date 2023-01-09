@@ -1,15 +1,14 @@
 
 import type {LoginValue} from "./schema";
 import {makeAlert} from "$lib/shared/store/alert";
-import {goto} from "$app/navigation";
-import pocketbase from "$lib/pocketbase";
-import {ClientResponseError} from "pocketbase";
 import {loginUser} from "$lib/client";
 import {AxiosError} from "axios";
+import {initCurrentUser} from "$lib/stores/auth";
 
 export const login = async (value: LoginValue) => {
     try {
         const user = await loginUser(value);
+        await initCurrentUser();
         return user;
     } catch (error) {
 
