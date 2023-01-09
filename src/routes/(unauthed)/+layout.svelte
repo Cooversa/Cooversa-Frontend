@@ -8,17 +8,17 @@
 	import Alert from '$lib/shared/components/Alert.svelte';
 	import type { Alert as AlertType } from '$lib/shared/store/alert.ts';
 	import pocketbase from '$lib/pocketbase';
-	import {currentUser, initCurrentUser} from '$lib/stores/auth';
+	import { currentUser, initCurrentUser } from '$lib/stores/auth';
 	import { ClientResponseError } from 'pocketbase';
-	import {browser} from "$app/environment";
+	import { browser } from '$app/environment';
 
-	import {navigating} from "$app/stores";
-	import loading from "$lib/shared/store/loading";
-	import Loading from "$lib/shared/components/Loading.svelte";
+	import { navigating } from '$app/stores';
+	import loading from '$lib/shared/store/loading';
+	import Loading from '$lib/shared/components/Loading.svelte';
 
 	$: {
 		loading.set(!!$navigating);
-	};
+	}
 
 	let alertsList: AlertType[] = [];
 
@@ -31,12 +31,12 @@
 	});
 
 	onMount(async () => {
-		await initCurrentUser()
+		await initCurrentUser();
 	});
 </script>
 
 <div class="flex flex-col h-screen">
-	{#if ($loading)}
+	{#if $loading}
 		<Loading />
 	{/if}
 	{#if alertsList.length}

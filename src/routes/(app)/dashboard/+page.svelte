@@ -31,7 +31,19 @@
         }
     };
 
+<<<<<<< HEAD
     let courses = getCourses();
+=======
+    let courses:any = [];
+
+    $: {
+        if (!$navigating) {
+            getCourses().then((data) => {
+                courses = data;
+            });
+        }
+    };
+>>>>>>> 2b44bc1ad2339c2845412ce752137a0a821fd3c5
 
 </script>
 
