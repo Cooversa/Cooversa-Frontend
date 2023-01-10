@@ -23,7 +23,6 @@
 			activeModuleId = moduleId;
 			activeModule = module;
 			const response = await client.get(`/modules/${module.slug}/lessons`);
-			console.log(response.data);
 			activeModuleLessons = response.data;
 		}
 		activeModuleLoading = false;

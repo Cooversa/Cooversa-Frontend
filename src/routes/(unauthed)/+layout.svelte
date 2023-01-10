@@ -2,15 +2,12 @@
 	import Navbar from '$lib/shared/components/Navbar.svelte';
 	import '../../styles/app.css';
 	import Footer from '$lib/shared/components/Footer.svelte';
-	import alerts from '$lib/shared/store/alert.ts';
+	import alerts from '$lib/shared/store/alert';
 	import { onDestroy, onMount } from 'svelte';
 	import AlertsList from '$lib/shared/components/AlertsList.svelte';
 	import Alert from '$lib/shared/components/Alert.svelte';
-	import type { Alert as AlertType } from '$lib/shared/store/alert.ts';
-	import pocketbase from '$lib/pocketbase';
-	import { currentUser, initCurrentUser } from '$lib/stores/auth';
-	import { ClientResponseError } from 'pocketbase';
-	import { browser } from '$app/environment';
+	import type { Alert as AlertType } from '$lib/shared/store/alert';
+	import { initCurrentUser } from '$lib/stores/auth';
 
 	import { navigating } from '$app/stores';
 	import loading from '$lib/shared/store/loading';

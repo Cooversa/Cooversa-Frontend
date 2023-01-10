@@ -21,7 +21,6 @@
 		isOpen = !isOpen;
 		dispatchNavState();
 	};
-	console.log(toggleOpen());
 
 	const logout = async () => {
 		await logoutUser();
@@ -94,7 +93,7 @@
 </script>
 
 <aside
-	class="bg-white fixed bottom-0 md:top-0 bottom-0 right-0 left-0 flex md:flex-col md:px-5 md:py-8 px-10 z-[9999999999999] py-5 shadow {isOpen
+	class="bg-white fixed bottom-0 md:top-0 right-0 left-0 flex md:flex-col md:px-5 md:py-8 px-10 z-[9999999999999] py-5 shadow {isOpen
 		? 'md:w-72'
 		: 'md:w-16'} w-screen transition-all"
 >
@@ -131,7 +130,7 @@
 		<nav class="md:space-y-6 w-full flex justify-between md:flex-col ">
 			{#each pages as nav}
 				<div>
-					<a class="flex items-center" on:click={toggleOpen} href={nav.url}>
+					<a class="flex items-center" href={nav.url}>
 						<div class="inline-block" class:text-primary={nav.url === $page.url.pathname}>
 							{@html nav.url === $page.url.pathname ? nav.activeSvg : nav.svg}
 						</div>

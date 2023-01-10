@@ -34,35 +34,35 @@
 	let couponError;
 	let couponLoading;
 	let amount = 8000;
-	let usedCoupon = false;
+	// let usedCoupon = false;
 
-	const applyCoupon = async () => {
-		usedCoupon = false;
-		couponLoading = true;
-		couponMessage = null;
-		couponError = null;
+	// const applyCoupon = async () => {
+	// 	usedCoupon = false;
+	// 	couponLoading = true;
+	// 	couponMessage = null;
+	// 	couponError = null;
 
-		try {
-			const { discount, error } = await verifyCoupon(coupon);
-			if (error) {
-				couponError = error;
-			} else {
-				amount = 8000 - discount;
-				if (amount < 0) {
-					amount = 0;
-				}
-				usedCoupon = true;
-				couponMessage =
-					amount === 0
-						? 'Coupon applied successfully. You are eligible for free registration'
-						: `Coupon applied successfully. You will pay ${amount} Naira`;
-			}
-		} catch (e) {
-			couponError = e.message;
-		} finally {
-			couponLoading = false;
-		}
-	};
+	// 	try {
+	// 		const { discount, error } = await verifyCoupon(coupon);
+	// 		if (error) {
+	// 			couponError = error;
+	// 		} else {
+	// 			amount = 8000 - discount;
+	// 			if (amount < 0) {
+	// 				amount = 0;
+	// 			}
+	// 			usedCoupon = true;
+	// 			couponMessage =
+	// 				amount === 0
+	// 					? 'Coupon applied successfully. You are eligible for free registration'
+	// 					: `Coupon applied successfully. You will pay ${amount} Naira`;
+	// 		}
+	// 	} catch (e) {
+	// 		couponError = e.message;
+	// 	} finally {
+	// 		couponLoading = false;
+	// 	}
+	// };
 
 	const pay = async () => {
 		if (amount === 0) {
@@ -268,7 +268,7 @@
 			{/if}
 		</div>
 
-		<div class="form-group">
+		<!-- <div class="form-group">
 			<label for="coupon" class="form-label">Discount Code</label>
 			<div>
 				<input
@@ -293,7 +293,7 @@
 			{#if couponError}
 				<p class="form-error">{couponError}</p>
 			{/if}
-		</div>
+		</div> -->
 
 		<button type="submit" class="form-button">
 			{#if loading}

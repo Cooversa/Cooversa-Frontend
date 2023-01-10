@@ -1,34 +1,28 @@
-import type { CreateProfileType } from './schema';
 import { makeAlert } from '$lib/shared/store/alert';
 import pocketbase from '$lib/pocketbase';
-import { ClientResponseError } from 'pocketbase';
 import { goto } from '$app/navigation';
 import axios, { AxiosError } from 'axios';
-import {createProfile} from "$lib/client";
-import type {CreateProfile} from "$lib/client/users/types";
-import {initCurrentUser} from "$lib/stores/auth";
-
+import { createProfile } from '$lib/client';
+import type { CreateProfile } from '$lib/client/users/types';
+import { initCurrentUser } from '$lib/stores/auth';
 
 export const generateTransactionRef = () => {
 	let text = '';
-	const possible =
-		'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-	for (let i = 0; i < 10; i++)
-		text += possible.charAt(Math.floor(Math.random() * possible.length));
+	for (let i = 0; i < 10; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
 
 	return text;
-}
-
+};
 
 export const verifyPayment = async (reference: string) => {
 	try {
-        const url = '/api/payment/verify';
-        await axios.get(url, {
-            params: {
-                reference
-            }
-        })
+		const url = '/api/payment/verify';
+		await axios.get(url, {
+			params: {
+				reference
+			}
+		});
 	} catch (error) {
 		if (error instanceof AxiosError && error.status === 400) {
 			makeAlert({
@@ -52,15 +46,12 @@ export const verifyCoupon = async (coupon: string) => {
 	let error = null;
 	let discount = null;
 	try {
-		const response = await pocketbase
-			.collection('coupon')
-			.getFirstListItem(`code="${coupon}"`);
+		const response = await pocketbase.collection('coupon').getFirstListItem(`code="${coupon}"`);
 		if (!response.is_active) {
 			error = 'This coupon is no longer active';
 		} else if (response.usage >= response.max_usage) {
 			error = 'This coupon has been used up';
-		}
-		else {
+		} else {
 			discount = response.amount;
 		}
 	} catch (err) {
@@ -68,7 +59,7 @@ export const verifyCoupon = async (coupon: string) => {
 		console.log('err', err);
 	}
 
-	return {error, discount};
+	return { error, discount };
 };
 
 const incrementCouponUsage = async (code: string) => {
@@ -78,7 +69,7 @@ const incrementCouponUsage = async (code: string) => {
 	} catch (error) {
 		console.log('error', error);
 	}
-}
+};
 
 export const sendWelcomeEmail = async (email: string, name: string) => {
 	const url = `/api/email/welcome?email=${email}&name=${name}`;
@@ -87,7 +78,7 @@ export const sendWelcomeEmail = async (email: string, name: string) => {
 	} catch (error) {
 		console.log('error', error);
 	}
-}
+};
 
 export const completeRegistration = async (data: CreateProfile, coupon = '') => {
 	try {
@@ -107,8 +98,8 @@ export const completeRegistration = async (data: CreateProfile, coupon = '') => 
 			makeAlert({
 				type: 'error',
 				title: 'Signup Error',
-				content: error.response?.data.message || 'Something went wrong',
-			})
+				content: error.response?.data.message || 'Something went wrong'
+			});
 			return;
 		}
 		makeAlert({
@@ -118,4 +109,3 @@ export const completeRegistration = async (data: CreateProfile, coupon = '') => 
 		});
 	}
 };
-
