@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { onMount } from 'svelte/types/runtime/internal/lifecycle';
+	import {onMount} from 'svelte';
 
 	export let videoUrl: string;
 	export let poster: string;
