@@ -7,7 +7,9 @@
 	let isOpen = true;
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
-	import pocketbase from '$lib/pocketbase';
+	import { logoutUser } from '$lib/client';
+	import { goto } from '$app/navigation';
+	import { initCurrentUser } from '$lib/stores/auth';
 
 	const dispatchNavState = () => {
 		dispatch('navState', {
@@ -21,7 +23,11 @@
 	};
 
 	const logout = async () => {
-		await pocketbase.authStore.clear();
+		await logoutUser();
+		await initCurrentUser();
+		if (browser) {
+			await goto('/auth/login');
+		}
 	};
 
 	const pages = [
@@ -87,7 +93,7 @@
 </script>
 
 <aside
-	class="bg-white fixed bottom-0 md:top-0 bottom-0 right-0 left-0 flex md:flex-col md:px-5 md:py-8 px-10 z-[9999999999999] py-5 shadow {isOpen
+	class="bg-white fixed bottom-0 md:top-0 right-0 left-0 flex md:flex-col md:px-5 md:py-8 px-10 z-[9999999999999] py-5 shadow {isOpen
 		? 'md:w-72'
 		: 'md:w-16'} w-screen transition-all"
 >
@@ -125,8 +131,7 @@
 			{#each pages as nav}
 				<div>
 					<a class="flex items-center" href={nav.url}>
-						<div class="inline-block" class:text-primary={nav.url === $page.url.pathname}
-						>
+						<div class="inline-block" class:text-primary={nav.url === $page.url.pathname}>
 							{@html nav.url === $page.url.pathname ? nav.activeSvg : nav.svg}
 						</div>
 						<div

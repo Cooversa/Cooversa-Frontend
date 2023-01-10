@@ -45,6 +45,7 @@
 		"pocketbase": "^0.9.0",
 		"supabase": "^1.27.4",
 		"svelte-confetti": "^1.2.2",
+		"tailwind-highlightjs": "^2.0.1",
 		"yup": "^0.32.11"
 	}
 }

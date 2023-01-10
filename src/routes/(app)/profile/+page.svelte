@@ -1,5 +1,3 @@
-
-
 <svelte:head>
     <title>
         Profile - Cooversa Dashboard

@@ -1,13 +1,13 @@
 <script lang="ts">
-    import pocketbase from "$lib/pocketbase";
-    export let course;
+    import type {Course} from "$lib/client/schools/types";
+    export let course: Course;
 </script>
 
 <div class="bg-white rounded-lg shadow-lg p-4">
     <!-- Image -->
     <a href="/courses/{course.slug}">
         <div class="h-48 bg-gray-200 rounded">
-            <img src={pocketbase.getFileUrl(course, course.featured_image, {thumb: "100x250"})} alt={course.title} class="object-cover h-full w-full object-center rounded" />
+            <img src={course.featuredImage} alt={course.title} class="object-cover h-full w-full object-center rounded" />
         </div>
     </a>
     <div class="mt-5">

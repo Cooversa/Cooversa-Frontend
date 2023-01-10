@@ -1,33 +1,31 @@
 import type { CreateUserType } from "./schema";
+import {createUser as register, loginUser} from "$lib/client";
+import {AxiosError} from "axios";
 import {makeAlert} from "$lib/shared/store/alert";
-import pocketbase from "$lib/pocketbase";
-import {ClientResponseError} from "pocketbase";
 import {goto} from "$app/navigation";
+import {initCurrentUser} from "$lib/stores/auth";
 
-export const createUser = async (user: CreateUserType) => {
+export const createUser = async (data: CreateUserType) => {
     try {
-        await pocketbase.collection('users').create(user);
-        await pocketbase.collection('users').authWithPassword(user.email, user.password);
-        await goto('/apply/step2');
+        await register(data);
+        await loginUser(data);
+        // Reload the current user
+        await initCurrentUser();
+        await goto("/apply/step2");
     } catch (error) {
-        if (error instanceof ClientResponseError) {
-            Object.keys(error.data.data).forEach((key) => {
-                makeAlert({
-                    title: 'Error',
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    content: error.data.data[key].message,
-                    type: 'error',
-                })
-            })
-            console.log(error.data.data)
-            return
+        if (error instanceof AxiosError) {
+            makeAlert({
+                type: "error",
+                title: "Sign Up Failed",
+                content: error.response?.data.message || "An error occurred",
+            });
+            return;
         }
+
         makeAlert({
-            title: "Signup Error",
-            content:  "Something went wrong, please try again later!",
             type: "error",
-        })
-        console.log('err', error)
+            title: "Sign Up Failed",
+            content: "An error occurred",
+        });
     }
 }

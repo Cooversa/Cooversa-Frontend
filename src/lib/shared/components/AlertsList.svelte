@@ -11,7 +11,7 @@
         right: 0;
         margin: 10px;
         display: grid;
-        place-items: center;
+        place-items: end;
         z-index: 9999;
     }
 

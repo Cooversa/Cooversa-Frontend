@@ -79,7 +79,7 @@
 					<a on:click={navItemClicked} href="/apply" class="secondary-nav-item">Apply Now</a>
 				</nav>
 
-			{:else if $currentUser.profile.length === 0}
+			{:else if !$currentUser.profile}
 				<nav class="secondary-nav">
 					<a on:click={navItemClicked} href="/apply/step2" class="secondary-nav-item">Complete application</a>
 				</nav>
@@ -134,7 +134,7 @@
 			{#if !$currentUser}
 				<a on:click={navItemClicked} href="/auth/login" class="mobile-nav-item">Login</a>
 				<a on:click={navItemClicked} href="/apply" class="mobile-nav-item-btn">Apply Now</a>
-			{:else if $currentUser.profile.length === 0}
+			{:else if !$currentUser.profile}
 				<a on:click={navItemClicked} href="/apply/step2" class="mobile-nav-item-btn">Complete application</a>
 			{:else}
 
