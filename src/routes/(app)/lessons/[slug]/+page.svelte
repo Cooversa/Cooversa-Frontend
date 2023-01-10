@@ -24,6 +24,7 @@
 				});
 			}
 		}
+		const player = new Plyr('#player');
 	});
 </script>
 
@@ -35,7 +36,9 @@
 	<h1 class="md:text-4xl text-2xl font-bold mb-10">{lesson.name}</h1>
 	<div class="mb-10 max-w-full rounded overflow-hidden mx-auto">
 		{#if videoUrl}
-			<Video {videoUrl} {poster} />
+			<video class="player video" id="player" playsinline controls data-poster={poster}>
+				<source src={videoUrl} type="video/mp4" />
+			</video>
 		{:else}
 			<img src={poster} alt={lesson.name} class="w-full" />
 		{/if}
