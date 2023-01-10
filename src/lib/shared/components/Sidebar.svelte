@@ -19,8 +19,6 @@
 		isOpen = !isOpen;
 		dispatchNavState();
 	};
-	console.log(toggleOpen());
-	
 
 	const logout = async () => {
 		await pocketbase.authStore.clear();
@@ -126,7 +124,7 @@
 		<nav class="md:space-y-6 w-full flex justify-between md:flex-col ">
 			{#each pages as nav}
 				<div>
-					<a class="flex items-center" on:click={toggleOpen} href={nav.url}>
+					<a class="flex items-center" href={nav.url}>
 						<div class="inline-block" class:text-primary={nav.url === $page.url.pathname}
 						>
 							{@html nav.url === $page.url.pathname ? nav.activeSvg : nav.svg}
