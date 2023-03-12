@@ -12,7 +12,7 @@
 		password: ''
 	};
 
-	let errors = {};
+	let errors: any = {};
 	let loading = false;
 
 	const submit = async () => {
@@ -56,7 +56,7 @@
 </script>
 
 <svelte:head>
-	<title>Cooversa - Register</title>
+	<title>Cooversa - Login</title>
 </svelte:head>
 
 <section id="apply">

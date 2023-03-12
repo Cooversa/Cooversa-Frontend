@@ -1,6 +1,7 @@
-import type {CreateProfile, CreateUser, Profile, User} from '$lib/client/users/types';
+import type { CreateProfile, CreateUser, Profile, User } from '$lib/client/users/types';
 import client from '$lib/client';
-import {AxiosError} from "axios";
+import { AxiosError } from 'axios';
+import type { CreateProfileType } from 'src/routes/(unauthed)/apply/step2/schema';
 
 export const createUser = async (user: CreateUser): Promise<User> => {
 	const response = await client.post('/users', user);
@@ -10,8 +11,7 @@ export const createUser = async (user: CreateUser): Promise<User> => {
 export const loginUser = async (user: CreateUser): Promise<User> => {
 	const response = await client.post('/auth/login', user);
 	return response.data;
-}
-
+};
 
 export const getLoggedInUser = async (): Promise<User | null> => {
 	try {
@@ -23,31 +23,31 @@ export const getLoggedInUser = async (): Promise<User | null> => {
 		}
 		throw e;
 	}
-}
+};
 
 export const logoutUser = async (): Promise<void> => {
 	await client.get('/auth/logout');
-}
+};
 
-export const createProfile = async (profile: CreateProfile): Promise<Profile> => {
+export const createProfile = async (profile: CreateProfileType): Promise<Profile> => {
 	const response = await client.post('/users/profile', profile);
 	return response.data;
-}
+};
 
 export const requestVerificationEmail = async (email: string) => {
 	const response = await client.get('/users/verification/send', {
 		params: {
 			email
 		}
-	})
-	return response.data
-}
+	});
+	return response.data;
+};
 
 export const confirmEmailVerification = async (token: string) => {
 	const response = await client.get('/users/verification/confirm', {
 		params: {
 			token
 		}
-	})
-	return response.data
-}
+	});
+	return response.data;
+};

@@ -3,46 +3,33 @@
 	import AppNavbar from '$lib/shared/components/AppNavbar.svelte';
 	import Sidebar from '$lib/shared/components/Sidebar.svelte';
 	import { currentUser, initCurrentUser } from '$lib/stores/auth';
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 
-	import alerts, { makeAlert } from '$lib/shared/store/alert';
-	import AlertsList from '$lib/shared/components/AlertsList.svelte';
-	import Alert from '$lib/shared/components/Alert.svelte';
-	import type { Alert as AlertType } from '$lib/shared/store/alert.ts';
 	import loading from '$lib/shared/store/loading';
-	import {navigating, page} from '$app/stores';
+	import { navigating, page } from '$app/stores';
 	import Loading from '$lib/shared/components/Loading.svelte';
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
-	import {requestVerificationEmail} from "$lib/client";
-	import {AxiosError} from "axios";
-	import LoadingSvg from "$lib/shared/components/LoadingSvg.svelte";
+	import { requestVerificationEmail } from '$lib/client';
+	import { AxiosError } from 'axios';
+	import LoadingSvg from '$lib/shared/components/LoadingSvg.svelte';
+	import { showAlert } from '$lib/utils/alert';
 
 	let isSidebarOpen = true;
 
 	$: loading.set(!!$navigating);
 
-	const setSidebarState = (e) => {
+	const setSidebarState = (e: any) => {
 		isSidebarOpen = e.detail.state;
 	};
-
-	let alertsList: AlertType[] = [];
-
-	let unsub = alerts.subscribe((data) => {
-		alertsList = data;
-	});
-
-	onDestroy(() => {
-		unsub();
-	});
 
 	const checkIfEnrolled = () => {
 		if ($currentUser && !$currentUser.schools.length && $currentUser.role === 'STUDENT') {
 			goto('/school');
-			makeAlert({
-				type: 'warning',
-				title: 'School not set',
-				content: 'Please enroll to a school to continue'
+
+			showAlert({
+				message: 'Please enroll to a school to continue',
+				type: 'warning'
 			});
 		}
 	};
@@ -53,34 +40,30 @@
 		verificationLoading = true;
 		try {
 			if ($currentUser) {
-				await requestVerificationEmail($currentUser.email)
-				makeAlert({
-					type: 'success',
-					title: 'Sent successfully',
-					content: 'Check your email for the email verification link!'
-				})
+				await requestVerificationEmail($currentUser.email);
+				showAlert({
+					message:
+						'Verification mail sent successfully, check your email for the verification link!',
+					type: 'success'
+				});
 			}
 		} catch (e) {
 			if (e instanceof AxiosError) {
-				makeAlert({
+				showAlert({
 					type: 'error',
-					title: 'Error',
-					content: e.response?.message || 'Something went wrong!'
-				})
-				return
+					message:
+						e.response?.data.message || 'Ooops something went wrong, please try again later...'
+				});
+				return;
 			}
-			makeAlert({
+			showAlert({
 				type: 'error',
-				title: 'Error',
-				content: 'Something went wrong!'
-			})
+				message: 'Ooops something went wrong, please try again later...'
+			});
 		} finally {
 			verificationLoading = false;
 		}
-
-	}
-
-
+	};
 
 	$: if (
 		$navigating &&
@@ -88,29 +71,75 @@
 		$navigating.to?.url.pathname !== '/apply' &&
 		$navigating.to?.url.pathname !== '/' &&
 		$navigating.to?.url.pathname !== '/admin' &&
-		$page.url.pathname !== '/users/verification/confirm'
+		$navigating.to?.url.pathname !== '/users/pay' &&
+		$navigating.to?.url.pathname !== '/users/verification/confirm' &&
+		$page.url.pathname !== '/users/verification/confirm' &&
+		$page.url.pathname !== '/users/pay'
 	) {
 		checkIfEnrolled();
 	}
 
-	onMount(async () => {
+	const checkPaymentStatus = () => {
+		if ($currentUser && $currentUser.status === 'PENDING_PAYMENT') {
+			showAlert({
+				type: 'info',
+				message: 'You need to pay your application fee to access the Cooversa LMS'
+			});
+			goto('/users/pay');
+		}
+	};
 
+	$: if ($navigating && $navigating.to?.url.pathname !== '/users/pay') {
+		checkPaymentStatus();
+	}
+
+	onMount(async () => {
 		await initCurrentUser();
 
+		// if (browser) {
+		// 	if ($page.url.pathname !== '/users/verification/confirm') checkIfEnrolled();
+
+		// 	if (!$currentUser) {
+		// 		goto('/auth/login');
+		// 	}
+
+		// 	if ($currentUser && $currentUser.role !== 'STUDENT') {
+		// 		await goto('/admin');
+		// 	} else if (
+		// 		$currentUser &&
+		// 		!$currentUser.isEmailVerified &&
+		// 		$page.url.pathname !== '/users/verification/confirm'
+		// 	) {
+		// 		await sendVerificationMail();
+		// 	} else if ($currentUser && $currentUser.status === 'PENDING_PAYMENT') {
+		// 		console.log('Not paid');
+		// 		await goto('/users/pay');
+		// 	}
+		// }
+
 		if (browser) {
-			if ($page.url.pathname !== '/users/verification/confirm')  checkIfEnrolled();
-
-
 			if (!$currentUser) {
-				goto('/auth/login');
-			}
+				await goto('/auth/login');
+			} else if ($currentUser && $currentUser.role !== 'STUDENT') {
+				showAlert({
+					type: 'info',
+					message: "You're not a student"
+				});
+				goto('/admin');
+			} else if ($currentUser && $currentUser.status === 'PENDING_PAYMENT') {
+				showAlert({
+					type: 'info',
+					message: 'You need to pay your application fee to access the Cooversa LMS'
+				});
+				goto('/users/pay');
+			} else if ($currentUser && !$currentUser.schools.length && $currentUser.role === 'STUDENT') {
+				goto('/school');
 
-			if ($currentUser && $currentUser.role !== 'STUDENT') {
-				await goto('/admin');
-			} else if ($currentUser && !$currentUser.isEmailVerified && $page.url.pathname !== '/users/verification/confirm') {
-				await sendVerificationMail()
+				showAlert({
+					message: 'Please enroll to a school to continue',
+					type: 'warning'
+				});
 			}
-
 		}
 	});
 </script>
@@ -119,20 +148,26 @@
 	<div class="h-screen flex flex-col justify-center items-center px-10">
 		<div class="bg-white space-y-5 max-w-4xl mx-auto">
 			<h1 class="text-2xl font-semibold">One more step</h1>
-			<p>In order to use the Cooversa dashboard, you must verify your email address. Please check your inbox for a verification email and follow the instructions to complete this process.</p>
-			<p>Thank you for choosing Cooversa for your learning journey. We look forward to supporting you in your studies.</p>
+			<p>
+				In order to use the Cooversa dashboard, you must verify your email address. Please check
+				your inbox for a verification email and follow the instructions to complete this process.
+			</p>
+			<p>
+				Thank you for choosing Cooversa for your learning journey. We look forward to supporting you
+				in your studies.
+			</p>
 			<button on:click={sendVerificationMail} class="button">
 				{#if verificationLoading}
-					<LoadingSvg/>
-				{:else }
+					<LoadingSvg />
+				{:else}
 					Get a new verification mail
-				{/if }
+				{/if}
 			</button>
 		</div>
 	</div>
 {:else if $page.url.pathname === '/users/verification/confirm'}
-	<slot/>
-{:else }
+	<slot />
+{:else}
 	<div class="relative min-h-screen md:flex">
 		<Sidebar on:navState={setSidebarState} />
 		<div
@@ -142,19 +177,6 @@
 			<div class="p-7">
 				{#if $loading}
 					<Loading />
-				{/if}
-				{#if alertsList.length}
-					<AlertsList>
-						{#each alertsList as alert}
-							<Alert
-								id={alert.id}
-								type={alert.type}
-								duration={alert.duration}
-								content={alert.content}
-								title={alert.title}
-							/>
-						{/each}
-					</AlertsList>
 				{/if}
 
 				<slot />
