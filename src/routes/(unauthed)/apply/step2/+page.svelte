@@ -9,7 +9,7 @@
 	import LoadingSvg from '$lib/shared/components/LoadingSvg.svelte';
 	import schema from './schema';
 	import { filteredObj } from '$lib/utils/removeEmptyString';
-	import { z } from 'Zod';
+	import { z } from 'zod';
 	import { AxiosError } from 'axios';
 	import { showAlert } from '$lib/utils/alert';
 
