@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { z } from 'Zod';
+import { z } from 'zod';
 
 export type CreateProfileType = {
 	firstName: string;
