@@ -8,7 +8,7 @@
 </script>
 
 <div
-	class="shadow z-[99999999] bg-white flex items-center md:relative fixed top-0 w-screen md:w-full main justify-between md:justify-end p-5 md:px-10"
+	class="shadow z-[20] bg-white flex items-center md:relative fixed top-0 w-screen md:w-full main justify-between md:justify-end p-5 md:px-10"
 >
 	<div class="md:hidden">
 		<a href="/dashboard">

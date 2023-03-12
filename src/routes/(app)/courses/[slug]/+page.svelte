@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { makeAlert } from '$lib/shared/store/alert';
 	import type { Module } from '$lib/client/schools/types';
 	import client from '$lib/client';
+	import { showAlert } from '$lib/utils/alert';
 
 	export let data: any;
 
@@ -30,10 +30,9 @@
 
 	const showAvailabilityAlert = () => {
 		if (!getAvailability(activeModule?.availableOn)) {
-			makeAlert({
+			showAlert({
 				type: 'info',
-				title: 'Info',
-				content: `Module will be available at <span class="font-bold">${new Date(
+				message: `Module will be available at <span class="font-bold">${new Date(
 					activeModule?.availableOn || ''
 				).toDateString()}</span>`
 			});

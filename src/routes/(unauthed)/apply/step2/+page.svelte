@@ -1,108 +1,20 @@
 <script lang="ts">
-	import schema from './schema';
-	import type { CreateProfileType } from './schema';
-	import {
-		completeRegistration,
-		generateTransactionRef,
-		verifyCoupon,
-		verifyPayment
-	} from './logic';
+	import { completeRegistration } from './logic';
 	import Selector from '$lib/shared/components/Selector.svelte';
 	import countries from '$lib/utils/countries.js';
 	import { currentUser } from '$lib/stores/auth';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { PUBLIC_PAYSTACK_PUBLIC_KEY } from '$env/static/public';
-	import { makeAlert } from '$lib/shared/store/alert';
 	import { browser } from '$app/environment';
 	import LoadingSvg from '$lib/shared/components/LoadingSvg.svelte';
-	import type { CreateProfile } from '$lib/client/users/types';
+	import schema from './schema';
+	import { filteredObj } from '$lib/utils/removeEmptyString';
+	import { z } from 'Zod';
+	import { AxiosError } from 'axios';
+	import { showAlert } from '$lib/utils/alert';
 
-	let values: CreateProfile = {
-		firstName: '',
-		lastName: '',
-		age: 18,
-		phoneNumber: '',
-		gender: '',
-		state: '',
-		country: '',
-		paymentReference: ''
-	};
-
-	let coupon;
-	let couponMessage;
-	let couponError;
-	let couponLoading;
-	let amount = 8000;
-	// let usedCoupon = false;
-
-	// const applyCoupon = async () => {
-	// 	usedCoupon = false;
-	// 	couponLoading = true;
-	// 	couponMessage = null;
-	// 	couponError = null;
-
-	// 	try {
-	// 		const { discount, error } = await verifyCoupon(coupon);
-	// 		if (error) {
-	// 			couponError = error;
-	// 		} else {
-	// 			amount = 8000 - discount;
-	// 			if (amount < 0) {
-	// 				amount = 0;
-	// 			}
-	// 			usedCoupon = true;
-	// 			couponMessage =
-	// 				amount === 0
-	// 					? 'Coupon applied successfully. You are eligible for free registration'
-	// 					: `Coupon applied successfully. You will pay ${amount} Naira`;
-	// 		}
-	// 	} catch (e) {
-	// 		couponError = e.message;
-	// 	} finally {
-	// 		couponLoading = false;
-	// 	}
-	// };
-
-	const pay = async () => {
-		if (amount === 0) {
-			await submit();
-			return;
-		}
-		loading = true;
-		try {
-			await schema.validate(values, { abortEarly: false });
-			let paystack = PaystackPop.setup({
-				key: PUBLIC_PAYSTACK_PUBLIC_KEY,
-				email: $currentUser?.email,
-				amount: amount * 100,
-				currency: 'NGN',
-				ref: generateTransactionRef(),
-				embed: false,
-				disabled: false,
-				callback: (response: any) => {
-					submit(response);
-				},
-				onClose: () => {
-					makeAlert({
-						title: 'Payment Cancelled',
-						content: 'You cancelled the payment process',
-						type: 'error'
-					});
-				}
-			});
-			paystack.openIframe();
-			errors = {};
-		} catch (error) {
-			errors = error.inner.reduce((acc, err) => {
-				return {
-					...acc,
-					[err.path]: err.message
-				};
-			}, {});
-		} finally {
-			loading = false;
-		}
+	let values: any = {
+		age: 18
 	};
 
 	let genders = [
@@ -132,24 +44,39 @@
 		values.country = e.detail.value;
 	};
 
-	let errors = {};
+	let errors: any = {};
 	let loading = false;
 
-	const submit = async (response?: any) => {
+	const submit = async () => {
+		errors = {};
 		loading = true;
 		try {
-			if (response) {
-				values.paymentReference = response.reference;
+			const result = await schema.parse(filteredObj(values));
+			await completeRegistration(values);
+		} catch (error: any) {
+			if (error instanceof z.ZodError) {
+				errors = error.flatten().fieldErrors;
+			} else if (error instanceof AxiosError) {
+				let message = 'There was an issue creating your profile, please try again later';
+				if (Array.isArray(error.response?.data.message)) {
+					message = '';
+					error.response?.data.message.forEach((errorMessage: string) => {
+						message = message + errorMessage + '\n';
+					});
+				} else if (error.response?.data.message) {
+					message = error.response?.data.message;
+				}
+
+				showAlert({
+					type: 'error',
+					message
+				});
+			} else {
+				showAlert({
+					type: 'error',
+					message: 'There was an issue creating your profile, please try again later'
+				});
 			}
-			await completeRegistration(values, coupon);
-		} catch (error) {
-			errors = error.inner.reduce((acc, err) => {
-				return {
-					...acc,
-					[err.path]: err.message
-				};
-			}, {});
-			console.log(error);
 		} finally {
 			loading = false;
 		}
@@ -175,7 +102,7 @@
 		/>
 		please note that you will be charged <b>&#8358;8,000</b>
 	</p>
-	<form class="form" on:submit|preventDefault={pay}>
+	<form class="form" on:submit|preventDefault={submit}>
 		<div class="form-group">
 			<label class="form-label" for="first_name">First Name</label>
 			<input
@@ -185,7 +112,7 @@
 				id="first_name"
 				bind:value={values.firstName}
 			/>
-			{#if errors.first_name}
+			{#if errors.firstName}
 				<p class="form-error">{errors.firstName}</p>
 			{/if}
 		</div>
@@ -199,7 +126,7 @@
 				id="last_name"
 				bind:value={values.lastName}
 			/>
-			{#if errors.last_name}
+			{#if errors.lastName}
 				<p class="form-error">{errors.lastName}</p>
 			{/if}
 		</div>
@@ -222,7 +149,7 @@
 				placeholder="e.g +234 812 345 6789"
 				bind:value={values.phoneNumber}
 			/>
-			{#if errors.phone_number}
+			{#if errors.phoneNumber}
 				<p class="form-error">{errors.phoneNumber}</p>
 			{/if}
 		</div>
@@ -299,10 +226,8 @@
 			{#if loading}
 				<!-- Loading spinner -->
 				<LoadingSvg />
-			{:else if amount === 0}
-				Complete Registration
 			{:else}
-				Continue to pay
+				Complete Registration
 			{/if}
 		</button>
 	</form>
