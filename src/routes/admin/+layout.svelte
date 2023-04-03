@@ -21,10 +21,6 @@
 
 		if ($currentUser && $currentUser.role !== 'ADMIN') {
 			await goto('/');
-			showAlert({
-				type: 'error',
-				message: 'You are not authorized to access this page.'
-			});
 		}
 	});
 </script>
