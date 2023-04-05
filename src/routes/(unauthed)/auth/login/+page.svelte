@@ -82,7 +82,8 @@
 			/>
 			<a
 				href="/auth/reset/reset-mail"
-				class="text-xs w-2/4 text-end mt-2 underline hover:decoration-primary">forgot password?</a
+				class="text-xs md:w-2/4 w-full text-end mt-2 underline hover:decoration-primary"
+				>forgot password?</a
 			>
 			{#if errors.password}
 				<p class="form-error">{errors.password}</p>

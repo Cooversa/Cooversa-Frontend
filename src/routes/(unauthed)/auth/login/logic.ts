@@ -15,7 +15,7 @@ export const login = async (value: LoginValue) => {
 				message: error.response?.data.message || 'Something went wrong, please try again later!',
 				type: 'error'
 			});
-			return;
+			throw error;
 		}
 		showAlert({
 			message: 'Something went wrong, please try again later!',

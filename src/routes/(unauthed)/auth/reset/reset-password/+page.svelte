@@ -6,34 +6,52 @@
 	import { AxiosError } from 'axios';
 	import { onMount } from 'svelte';
 	import * as yup from 'yup';
-	import { sendResetPasswordMail } from './logic';
+	import { resetPassword } from './logic';
+	import { page } from '$app/stores';
 
 	let loading: boolean = false;
-	let data = {
-		email: ''
+	let data: any = {
+		password: '',
+		passwordConfirm: ''
 	};
 	let errors: any = {};
 
-	const emailSchema = yup.object().shape({
-		email: yup.string().required('Email is required')
+	const passwordSchema = yup.object().shape({
+		password: yup
+			.string()
+			.matches(
+				/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\w\W]{8,}$/,
+				`Password must be at least 8 characters long, contain at least one uppercase letter,
+			one lowercase letter, and one number`
+			)
+			.required('Password is required'),
+		passwordConfirm: yup
+			.string()
+			.required('Please confirm your password')
+			.oneOf([yup.ref('password'), null], 'Passwords must match')
 	});
+
+	const token = $page.url.searchParams.get('token');
+
 	const handleSubmit = async () => {
 		loading = true;
-
 		try {
-			await emailSchema.validate(data, { abortEarly: false });
-			const sendResetMail = await sendResetPasswordMail(data.email);
+			await passwordSchema.validate(data, { abortEarly: false });
+			delete data.passwordConfirm;
+			data['token'] = token;
+
+			const reset = await resetPassword(data);
 			showAlert({
 				type: 'success',
-				message: sendResetMail.message
+				message: 'Password reset successfulL!!'
 			});
-			await goto('/auth/reset/reset-mail/success');
-			errors = {};
+			await goto('/auth/login');
+			// errors = {};
 		} catch (error: any) {
 			if (error instanceof AxiosError) {
 				showAlert({
 					type: 'error',
-					message: 'Ooops something went wrong'
+					message: 'Token expired'
 				});
 			}
 			errors = error.inner.reduce((acc: any, err: any) => {
@@ -42,30 +60,42 @@
 					[err.path]: err.message
 				};
 			}, {});
-			console.log(errors);
 		} finally {
 			loading = false;
 		}
 	};
-
-	onMount(() => {
-		if (browser) {
-			console.log($currentUser);
-		}
-	});
 </script>
 
 <svelte:head>
-	<title>Forgot password - Cooversa</title>
+	<title>Reset password - Cooversa</title>
 </svelte:head>
 <section id="reset">
-	<h1 class="title">Reset mail</h1>
+	<h1 class="title">Reset Password</h1>
 	<form action="" class="form" on:submit|preventDefault={handleSubmit}>
 		<div class="form-group">
-			<label for="email" class="form-label">Email</label>
-			<input type="email" bind:value={data.email} name="email" class="form-input" id="email" />
-			{#if errors.email}
-				<p class="form-error">{errors.email}</p>
+			<label for="password" class="form-label">Password</label>
+			<input
+				type="password"
+				bind:value={data.password}
+				name="password"
+				class="form-input"
+				id="password"
+			/>
+			{#if errors.password}
+				<p class="form-error">{errors.password}</p>
+			{/if}
+		</div>
+		<div class="form-group">
+			<label for="passwordConfirm" class="form-label">Confirm password</label>
+			<input
+				type="password"
+				bind:value={data.passwordConfirm}
+				name="passwordConfirm"
+				class="form-input"
+				id="passwordConfirm"
+			/>
+			{#if errors.passwordConfirm}
+				<p class="form-error">{errors.passwordConfirm}</p>
 			{/if}
 		</div>
 		<button type="submit" class="form-button">
