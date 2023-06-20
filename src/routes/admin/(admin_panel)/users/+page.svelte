@@ -8,8 +8,8 @@
 </svelte:head>
 <section class="admin-home py-[2.5em] ">
 	<section>
-		<p class="md:text-xl text-gray-300 mb-12">
-			Dashboard / <span class="text-gray-700 text-lg">users</span>
+		<p class="text-lg text-gray-300 mb-12">
+			<a href="/admin">Dashboard</a> / <span class="text-primary font-medium">users</span>
 		</p>
 	</section>
 

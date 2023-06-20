@@ -32,6 +32,7 @@
 	let search = '';
 
 	let selectedLabel = '';
+	export let full = false;
 
 	$: {
 		const selectedOption = options.find((value) => {
@@ -41,7 +42,7 @@
 	}
 </script>
 
-<div class="wrapper">
+<div class="wrapper relative {full ? 'w-[100%]' : 'w-[100%] md:w-[80%] lg:w-[50%]'}">
 	<div
 		class="bg-white border-[#e5e5e5] border text-[14px] {selected
 			? 'text-[#1a1a1a]'
@@ -73,7 +74,7 @@
 		<ul
 			in:slide={{ duration: 200 }}
 			out:slide={{ duration: 200 }}
-			class="bg-white max-h-60 overflow-y-auto border-[#e5e5e5] border text-[14px] text-[#454545] rounded-[5px] mt-2"
+			class="bg-white w-full shadow-md absolute max-h-60 overflow-y-auto border-[#e5e5e5] border text-[14px] text-[#454545] rounded-[5px] mt-2"
 		>
 			<div class="flex items-center px-2 sticky top-0 bg-white">
 				<div class="text-[#1a1a1a]">
@@ -117,21 +118,3 @@
 		</ul>
 	{/if}
 </div>
-
-<style>
-	.wrapper {
-		width: 50%;
-	}
-
-	@media (max-width: 1200px) {
-		.wrapper {
-			width: 80%;
-		}
-	}
-
-	@media (max-width: 768px) {
-		.wrapper {
-			width: 100%;
-		}
-	}
-</style>

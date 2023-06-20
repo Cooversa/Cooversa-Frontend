@@ -4,6 +4,7 @@
 	import { AxiosError } from 'axios';
 	import LoadingSvg from '$lib/shared/components/LoadingSvg.svelte';
 	import type { User } from '$lib/client/users/types';
+	import { goto } from '$app/navigation';
 
 	let params = {
 		skip: 0,
@@ -38,28 +39,7 @@
 
 	let users = getUsers();
 
-	const tableHeaders = [
-		{
-			name: 'Email',
-			icon: '<iconify-icon icon="ic:outline-email" width="20"></iconify-icon>'
-		},
-		{
-			name: 'Status',
-			icon: '<iconify-icon icon="fluent:status-16-regular" width="20"></iconify-icon>'
-		},
-		{
-			name: 'Role',
-			icon: '<iconify-icon icon="eos-icons:role-binding-outlined" width="20"></iconify-icon>'
-		},
-		{
-			name: 'Verified',
-			icon: '<iconify-icon icon="ic:outline-mark-email-read" width="20"></iconify-icon>'
-		},
-		{
-			name: 'Created At',
-			icon: '<iconify-icon icon="streamline:interface-calendar-check-approve-calendar-check-date-day-month-success" width="20"></iconify-icon>'
-		}
-	];
+	const tableHeaders = ['email', 'status', 'role', 'isEmailVerified', 'createdAt'];
 
 	let input: HTMLInputElement;
 
@@ -105,7 +85,7 @@
 					id="search-input"
 					name="search-input"
 					aria-label="Search"
-					placeholder={`{ 'email': 'johndoe@company.com', 'status': 'APPLIED' }`}
+					placeholder={`{ 'email': 'contains:johndoe@company.com', 'status': 'equals:APPLIED' }`}
 					class="outline-none bg-transparent w-full px-1 text-sm"
 				/>
 			</div>
@@ -116,21 +96,23 @@
 				><iconify-icon icon="ic:outline-search" width="20" /></button
 			>
 		</div>
+		<p class="text-xs text-gray-500 font-medium pt-5">
+			Available Operators: equals, contains, not, in, notIn, lt (less than), gt (greater than), gte
+			(greater than or equals), lte (less than or equals to), search, startsWith, endsWith
+		</p>
 	</form>
 
-	<div class="flex flex-col overflow-x-auto shadow-md border">
+	<div class="flex flex-col overflow-x-auto rounded-lg shadow-md border">
 		<div class="sm:-mx-6 lg:-mx-8">
-			<div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+			<div class="inline-block min-w-full  sm:px-6 lg:px-8">
 				<div class="overflow-x-auto">
 					<table class="min-w-full text-left text-sm font-light">
-						<thead class="border-b font-medium dark:border-neutral-500">
+						<thead class="bg-gray-100 font-medium dark:border-neutral-500">
 							<tr>
 								{#each tableHeaders as header}
-									<th scope="col" class="font-normal px-6 py-4">
+									<th scope="col" class="font-normal text-gray-500 px-6 py-4">
 										<div class="">
-											{@html header.icon}
-
-											<p class="font-semibold text-sm">{header.name}</p>
+											<p class="font-semibold  text-sm">{header}</p>
 										</div>
 									</th>
 								{/each}
@@ -141,7 +123,10 @@
 								<LoadingSvg />
 							{:then users}
 								{#each users as user}
-									<tr class="rounded  text-sm ">
+									<tr
+										class="rounded cursor-pointer hover:bg-gray-100 text-sm "
+										on:click={() => goto(`/admin/users/${user.userId}`)}
+									>
 										<td class="whitespace-nowrap px-6 py-4">{user.email}</td>
 										<td class="whitespace-nowrap px-6 py-4">{user.status}</td>
 										<td class="whitespace-nowrap px-6 py-4">{user.role}</td>
@@ -164,13 +149,6 @@
 												year: 'numeric'
 											})}</td
 										>
-										<td>
-											<a
-												href="/admin/users/{user.userId}"
-												class="bg-primary px-3 py-2 text-white rounded-sm hover:bg-white hover:text-primary border border-primary"
-												>View</a
-											>
-										</td>
 									</tr>
 								{/each}
 							{/await}
@@ -179,40 +157,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	<div aria-label="Page navigation example">
-		<ul class="list-style-none flex">
-			<li>
-				<a
-					class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white"
-					href="#">Previous</a
-				>
-			</li>
-			<li>
-				<a
-					class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white"
-					href="#">1</a
-				>
-			</li>
-			<li aria-current="page">
-				<a
-					class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white"
-					href="#">2</a
-				>
-			</li>
-			<li>
-				<a
-					class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white"
-					href="#">3</a
-				>
-			</li>
-			<li>
-				<a
-					class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white"
-					href="#">Next</a
-				>
-			</li>
-		</ul>
 	</div>
 </main>
 
@@ -229,8 +173,5 @@
 		/* border: 1px solid #dddddd; */
 		text-align: left;
 		padding: 15px;
-	}
-	tr:nth-child(even) {
-		background-color: #dddddd;
 	}
 </style>

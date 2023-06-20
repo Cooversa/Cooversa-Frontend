@@ -101,6 +101,15 @@
 		color: #454545;
 	}
 
+	.form-input-full {
+		width: 100%;
+		padding: 10px 20px;
+		border: 1px solid #e5e5e5;
+		border-radius: 5px;
+		font-size: 14px;
+		color: #454545;
+	}
+
 	.form-input:focus {
 		outline: none;
 		border: 1px solid #000;
