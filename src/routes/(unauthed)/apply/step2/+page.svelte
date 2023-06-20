@@ -37,11 +37,11 @@
 	];
 
 	const selectGender = (e: CustomEvent) => {
-		values.gender = e.detail.value;
+		values.gender = e.detail;
 	};
 
 	const selectCountry = (e: CustomEvent) => {
-		values.country = e.detail.value;
+		values.country = e.detail;
 	};
 
 	let errors: any = {};

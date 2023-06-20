@@ -4,7 +4,6 @@
 	import Sidebar from '$lib/shared/components/Sidebar.svelte';
 	import { currentUser, initCurrentUser } from '$lib/stores/auth';
 	import { onMount } from 'svelte';
-
 	import loading from '$lib/shared/store/loading';
 	import { navigating, page } from '$app/stores';
 	import Loading from '$lib/shared/components/Loading.svelte';
