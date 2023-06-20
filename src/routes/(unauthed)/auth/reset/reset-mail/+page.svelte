@@ -1,95 +1,73 @@
 <script lang="ts">
-	import schema from './schema';
-	import type { LoginValue } from './schema';
-	import { login } from './logic';
-	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
+	import { goto } from '$app/navigation';
+	import { currentUser } from '$lib/stores/auth';
+	import { showAlert } from '$lib/utils/alert';
+	import { AxiosError } from 'axios';
 	import { onMount } from 'svelte';
-	import { currentUser, initCurrentUser } from '$lib/stores/auth';
+	import * as yup from 'yup';
+	import { sendResetPasswordMail } from './logic';
 
-	let values: LoginValue = {
-		email: '',
-		password: ''
+	let loading: boolean = false;
+	let data = {
+		email: ''
 	};
-
 	let errors: any = {};
-	let loading = false;
 
-	const submit = async () => {
+	const emailSchema = yup.object().shape({
+		email: yup.string().required('Email is required')
+	});
+	const handleSubmit = async () => {
 		loading = true;
-		try {
-			await schema.validate(values, { abortEarly: false });
-			const user = await login(values);
 
-			if (user?.profile) {
-				await goto('/dashboard');
-			} else {
-				await goto('/apply/step2');
-			}
+		try {
+			await emailSchema.validate(data, { abortEarly: false });
+			const sendResetMail = await sendResetPasswordMail(data.email);
+			showAlert({
+				type: 'success',
+				message: sendResetMail.message
+			});
+			await goto('/auth/reset/reset-mail/success');
 			errors = {};
 		} catch (error: any) {
+			if (error instanceof AxiosError) {
+				showAlert({
+					type: 'error',
+					message: 'Ooops something went wrong'
+				});
+			}
 			errors = error.inner.reduce((acc: any, err: any) => {
 				return {
 					...acc,
 					[err.path]: err.message
 				};
 			}, {});
+			console.log(errors);
 		} finally {
 			loading = false;
 		}
 	};
 
-	onMount(async () => {
-		await initCurrentUser();
-
+	onMount(() => {
 		if (browser) {
-			const user = $currentUser;
-			if (user) {
-				if (user.profile) {
-					await goto('/dashboard');
-				} else {
-					await goto('/apply/step2');
-				}
-			}
+			console.log($currentUser);
 		}
 	});
 </script>
 
 <svelte:head>
-	<title>Login - Cooversa</title>
+	<title>Forgot password - Cooversa</title>
 </svelte:head>
-
-<section id="apply">
-	<h2 class="title">Login</h2>
-
-	<form class="form" on:submit|preventDefault={submit}>
+<section id="reset">
+	<h1 class="title">Reset mail</h1>
+	<form action="" class="form" on:submit|preventDefault={handleSubmit}>
 		<div class="form-group">
 			<label for="email" class="form-label">Email</label>
-			<input type="email" name="email" bind:value={values.email} id="email" class="form-input" />
+			<input type="email" bind:value={data.email} name="email" class="form-input" id="email" />
 			{#if errors.email}
 				<p class="form-error">{errors.email}</p>
 			{/if}
 		</div>
-
-		<div class="form-group">
-			<label for="password" class="form-label">Password</label>
-			<input
-				type="password"
-				name="password"
-				bind:value={values.password}
-				id="password"
-				class="form-input"
-			/>
-			<a
-				href="/auth/reset/reset-mail"
-				class="text-xs md:w-2/4 w-full text-end mt-2 underline hover:decoration-primary"
-				>forgot password?</a
-			>
-			{#if errors.password}
-				<p class="form-error">{errors.password}</p>
-			{/if}
-		</div>
-
 		<button type="submit" class="form-button">
 			{#if loading}
 				<!-- Loading spinner -->
@@ -111,14 +89,14 @@
 					<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
 				</svg>
 			{:else}
-				Continue
+				Submit
 			{/if}
 		</button>
 	</form>
 </section>
 
 <style>
-	#apply {
+	#reset {
 		max-width: 1300px;
 		margin: 0 auto;
 		padding: 20px 60px;
@@ -140,7 +118,7 @@
 	}
 
 	@media (max-width: 768px) {
-		#apply {
+		#reset {
 			padding: 30px 20px;
 		}
 

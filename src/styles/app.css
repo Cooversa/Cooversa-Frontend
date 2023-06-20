@@ -1,192 +1,201 @@
 @import url('https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
+@import 'https://cdn.jsdelivr.net/npm/gridjs/dist/theme/mermaid.min.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-    @font-face {
-        font-family: Gilmer;
-        /* Multiple font files */
-        src: url('/fonts/Gilmer-Light.otf') format('opentype');
-        font-weight: 300;
-        font-display: swap;
-    }
+	@font-face {
+		font-family: Gilmer;
+		/* Multiple font files */
+		src: url('/fonts/Gilmer-Light.otf') format('opentype');
+		font-weight: 300;
+		font-display: swap;
+	}
 
-    @font-face {
-        font-family: Gilmer;
-        /* Multiple font files */
-        src: url('/fonts/Gilmer-Regular.otf') format('opentype');
-        font-weight: 400;
-        font-display: swap;
-    }
+	@font-face {
+		font-family: Gilmer;
+		/* Multiple font files */
+		src: url('/fonts/Gilmer-Regular.otf') format('opentype');
+		font-weight: 400;
+		font-display: swap;
+	}
 
-    @font-face {
-        font-family: Gilmer;
-        /* Multiple font files */
-        src: url('/fonts/Gilmer-Medium.otf') format('opentype');
-        font-weight: 500;
-        font-display: swap;
-    }
+	@font-face {
+		font-family: Gilmer;
+		/* Multiple font files */
+		src: url('/fonts/Gilmer-Medium.otf') format('opentype');
+		font-weight: 500;
+		font-display: swap;
+	}
 
-    @font-face {
-        font-family: Gilmer;
-        /* Multiple font files */
-        src: url('/fonts/Gilmer-Bold.otf') format('opentype');
-        font-weight: 700;
-        font-display: swap;
-    }
+	@font-face {
+		font-family: Gilmer;
+		/* Multiple font files */
+		src: url('/fonts/Gilmer-Bold.otf') format('opentype');
+		font-weight: 700;
+		font-display: swap;
+	}
 
-    @font-face {
-        font-family: Gilmer;
-        /* Multiple font files */
-        src: url('/fonts/Gilmer-Heavy.otf') format('opentype');
-        font-weight: 900;
-        font-display: swap;
-    }
+	@font-face {
+		font-family: Gilmer;
+		/* Multiple font files */
+		src: url('/fonts/Gilmer-Heavy.otf') format('opentype');
+		font-weight: 900;
+		font-display: swap;
+	}
 
-    html {
-        font-family: Gilmer, sans-serif;
-        color: #1A1A1A;
-    }
+	html {
+		font-family: Gilmer, sans-serif;
+		color: #1a1a1a;
+	}
 
-    * {
-        box-sizing: border-box;
-    }
+	* {
+		box-sizing: border-box;
+	}
 
-    :root {
-        --plyr-color-main: #5c57ff;
-    }
+	:root {
+		--plyr-color-main: #5c57ff;
+	}
 
-    .button {
-        padding: 10px 20px;
-        background-color: #5c57ff;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        font-size: 14px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+	.button {
+		padding: 10px 20px;
+		background-color: #5c57ff;
+		color: #fff;
+		border: none;
+		border-radius: 5px;
+		font-size: 14px;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 
-    .button-disabled {
-        background-color: #aba9ff;
-    }
+	.button-disabled {
+		background-color: #aba9ff;
+	}
 
-    .form {
-        margin-top: 40px;
-    }
+	.form {
+		margin-top: 40px;
+	}
 
-    .form-group {
-        margin-bottom: 20px;
-    }
+	.form-group {
+		margin-bottom: 20px;
+		display: flex;
+		flex-direction: column;
+	}
 
-    .form-label {
-        display: block;
-        font-size: 14px;
-        color: #454545;
-        margin-bottom: 10px;
-    }
+	.form-label {
+		display: block;
+		font-size: 14px;
+		color: #454545;
+		margin-bottom: 10px;
+	}
 
-    .form-input {
-        width: 50%;
-        padding: 10px 20px;
-        border: 1px solid #e5e5e5;
-        border-radius: 5px;
-        font-size: 14px;
-        color: #454545;
-    }
+	.form-input {
+		width: 50%;
+		padding: 10px 20px;
+		border: 1px solid #e5e5e5;
+		border-radius: 5px;
+		font-size: 14px;
+		color: #454545;
+	}
 
-    .form-input:focus {
-        outline: none;
-        border: 1px solid #000;
-    }
+	.form-input-full {
+		width: 100%;
+		padding: 10px 20px;
+		border: 1px solid #e5e5e5;
+		border-radius: 5px;
+		font-size: 14px;
+		color: #454545;
+	}
 
-    .form-error {
-        color: red;
-        font-size: 12px;
-        margin-top: 10px;
-    }
+	.form-input:focus {
+		outline: none;
+		border: 1px solid #000;
+	}
 
-    .form-helpertext {
-        color: #454545;
-        font-size: 12px;
-        margin-top: 10px;
-    }
+	.form-error {
+		color: red;
+		font-size: 12px;
+		margin-top: 10px;
+	}
 
-    .form-button {
-        padding: 10px 20px;
-        background-color: #5c57ff;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        font-size: 14px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+	.form-helpertext {
+		color: #454545;
+		font-size: 12px;
+		margin-top: 10px;
+	}
 
-    .form-button:hover {
-        background-color: #4a44e0;
-    }
+	.form-button {
+		padding: 10px 20px;
+		background-color: #5c57ff;
+		color: #fff;
+		border: none;
+		border-radius: 5px;
+		font-size: 14px;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 
-    .form-input-button {
-        padding: 10px 20px;
-        background-color: #5c57ff;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        font-size: 14px;
-        cursor: pointer;
-    }
+	.form-button:hover {
+		background-color: #4a44e0;
+	}
 
-    .form-input-button:hover {
-        background-color: #4a44e0;
-    }
+	.form-input-button {
+		padding: 10px 20px;
+		background-color: #5c57ff;
+		color: #fff;
+		border: none;
+		border-radius: 5px;
+		font-size: 14px;
+		cursor: pointer;
+	}
 
-    .alert-info {
-        background-color: #1c92f2;
-    }
+	.form-input-button:hover {
+		background-color: #4a44e0;
+	}
 
-    .alert-success {
-        background-color: #0c7a0c;
-    }
+	.alert-info {
+		background-color: #1c92f2;
+	}
 
-    .alert-warning {
-        background-color: #cba308;
-    }
+	.alert-success {
+		background-color: #0c7a0c;
+	}
 
-    .alert-error {
-        background-color: #d50f0f;
-    }
+	.alert-warning {
+		background-color: #cba308;
+	}
 
+	.alert-error {
+		background-color: #d50f0f;
+	}
 
+	@media (max-width: 1200px) {
+		.form-input {
+			width: 80%;
+		}
+	}
 
-    @media (max-width: 1200px) {
-        .form-input {
-            width: 80%;
-        }
-    }
+	@media (max-width: 768px) {
+		.form-input {
+			width: 100%;
+		}
 
-    @media (max-width: 768px) {
-        .form-input {
-            width: 100%;
-        }
+		.form-input-button {
+			display: block;
+			margin-top: 20px;
+		}
 
-        .form-input-button {
-            display: block;
-            margin-top: 20px;
-        }
-
-        .form-button {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
-        }
-    }
-
+		.form-button {
+			width: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin-top: 20px;
+		}
+	}
 }
