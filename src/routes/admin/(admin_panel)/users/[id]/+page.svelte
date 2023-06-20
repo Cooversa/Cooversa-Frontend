@@ -147,7 +147,7 @@
 {#if loading}
 	<Loading />
 {:else if user}
-	<main class="px-5">
+	<main>
 		<section>
 			<p class="text-lg text-gray-300 mb-12">
 				<a href="/admin">Dashboard</a> / <a href="/admin/users">users</a> /

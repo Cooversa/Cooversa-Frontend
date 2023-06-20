@@ -8,7 +8,7 @@
 			Welcome <span class="text-primary">{$currentUser?.profile.firstName || 'Admin'}</span>
 		</h2>
 	</div>
-	<div class="grid grid-cols-2 md:grid-cols-2 gap-10">
+	<div class="grid grid-cols-2 md:grid-cols-2 gap-5 md:gap-10">
 		<a
 			href="/admin/users"
 			class="shadow transition-all duration-300 p-5 flex flex-col justify-center space-y-2 items-center rounded hover:shadow-md border "
