@@ -144,48 +144,62 @@
 			These are basic analytics for Cooversa, more will be added in the future
 		</p>
 	</div>
-	<div class="grid gris-cols-2 gap-5 md:gap-10 md:grid-cols-3 mb-5">
-		<!-- Card to display total students -->
-		<div class="bg-white w-full h-full shadow-md rounded-md p-5 border-b-4 border-primary">
-			<h3 class="text-xl text-gray-500 font-medium">Students</h3>
-			<p class="text-3xl text-gray-500 font-bold mt-5">{totalStudents}</p>
+	{#if loading}
+		<div class="flex justify-center">
+			<svg
+				class="animate-spin  h-5 w-5 text-primary"
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 24 24"
+			>
+				<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+				<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+			</svg>
 		</div>
-		<!-- Card to display total students -->
-		<div class="bg-white w-full h-full shadow-md rounded-md p-5 border-b-4 border-primary">
-			<h3 class="text-xl text-gray-500 font-medium">Schools</h3>
-			<p class="text-3xl text-gray-500 font-bold mt-5">{totalSchools}</p>
-		</div>
-		<!-- Card to display total students -->
-		<div class="bg-white w-full h-full shadow-md rounded-md p-5 border-b-4 border-primary">
-			<h3 class="text-xl text-gray-500 font-medium">Courses</h3>
-			<p class="text-3xl text-gray-500 font-bold mt-5">{totalCourses}</p>
-		</div>
-	</div>
-	<div>
-		{#if users}
-			<div class="w-full h-full">
-				<Chart
-					data={usersAnalytics}
-					type="line"
-					title="Weekly User Analytics"
-					colors={[
-						'#5c57ff',
-						'#1b3bff',
-						'#8F00FF',
-						'#ff0011',
-						'#ff7300',
-						'#ffd600',
-						'#00c30e',
-						'#65ff00',
-						'#d200ff',
-						'#FF00FF',
-						'#7d7d7d',
-						'#5d5d5d'
-					]}
-				/>
+	{:else}
+		<div class="grid gris-cols-2 gap-5 md:gap-10 md:grid-cols-3 mb-5">
+			<!-- Card to display total students -->
+			<div class="bg-white w-full h-full shadow-md rounded-md p-5 border-b-4 border-primary">
+				<h3 class="text-xl text-gray-500 font-medium">Students</h3>
+				<p class="text-3xl text-gray-500 font-bold mt-5">{totalStudents}</p>
 			</div>
-		{:else}
-			<LoadingSvg />
-		{/if}
-	</div>
+			<!-- Card to display total students -->
+			<div class="bg-white w-full h-full shadow-md rounded-md p-5 border-b-4 border-primary">
+				<h3 class="text-xl text-gray-500 font-medium">Schools</h3>
+				<p class="text-3xl text-gray-500 font-bold mt-5">{totalSchools}</p>
+			</div>
+			<!-- Card to display total students -->
+			<div class="bg-white w-full h-full shadow-md rounded-md p-5 border-b-4 border-primary">
+				<h3 class="text-xl text-gray-500 font-medium">Courses</h3>
+				<p class="text-3xl text-gray-500 font-bold mt-5">{totalCourses}</p>
+			</div>
+		</div>
+		<div>
+			{#if users}
+				<div class="w-full h-full">
+					<Chart
+						data={usersAnalytics}
+						type="line"
+						title="Weekly User Analytics"
+						colors={[
+							'#5c57ff',
+							'#1b3bff',
+							'#8F00FF',
+							'#ff0011',
+							'#ff7300',
+							'#ffd600',
+							'#00c30e',
+							'#65ff00',
+							'#d200ff',
+							'#FF00FF',
+							'#7d7d7d',
+							'#5d5d5d'
+						]}
+					/>
+				</div>
+			{:else}
+				<LoadingSvg />
+			{/if}
+		</div>
+	{/if}
 </section>
