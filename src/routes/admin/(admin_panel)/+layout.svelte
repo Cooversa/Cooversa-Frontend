@@ -6,6 +6,7 @@
 	import { browser } from '$app/environment';
 	import AdminSideNav from '$lib/admin/AdminSideNav.svelte';
 	import 'iconify-icon';
+	import { showAlert } from '../../../lib/utils/alert';
 
 	const logout = async () => {
 		await logoutUser();
@@ -30,8 +31,17 @@
 
 		if (!$currentUser) {
 			await goto('/admin/auth/login');
-		} else if ($currentUser && $currentUser.role !== 'ADMIN') {
+			showAlert({
+				message: 'You are not logged in',
+				type: 'error'
+			});
+		} // If the user is logged in but not an admin or a teacher, redirect them to the home page
+		else if ($currentUser && $currentUser.role !== 'ADMIN' && $currentUser.role !== 'TEACHER') {
 			await goto('/');
+			showAlert({
+				message: 'You are not an admin',
+				type: 'error'
+			});
 		}
 	});
 </script>

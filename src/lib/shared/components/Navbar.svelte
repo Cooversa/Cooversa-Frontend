@@ -1,7 +1,7 @@
 <script lang="ts">
-	import {onMount} from "svelte";
-	import {slide} from "svelte/transition";
-	import {currentUser} from "$lib/stores/auth";
+	import { onMount } from 'svelte';
+	import { slide } from 'svelte/transition';
+	import { currentUser } from '$lib/stores/auth';
 
 	let mobileNavOpen = false;
 
@@ -11,53 +11,57 @@
 
 	const navItemClicked = () => {
 		mobileNavOpen = false;
-		setShow(true)
+		setShow(true);
 		addShadow = false;
 		lastScrollY = 0;
 	};
 
 	let visibleNav = true;
-    let lastScrollY = 0;
+	let lastScrollY = 0;
 	let addShadow = false;
 
-    const setShow = (value: boolean) => {
-        visibleNav = value;
-    }
+	const setShow = (value: boolean) => {
+		visibleNav = value;
+	};
 
-    const setLastScrollY = (value: number) => {
-        lastScrollY = value;
+	const setLastScrollY = (value: number) => {
+		lastScrollY = value;
 		addShadow = value > 0;
-    }
+	};
 
-    const controlNavbar = () => {
-        if (typeof window !== 'undefined') {
-            if (window.scrollY > lastScrollY + 3) { // if scroll down hide the navbar
-                setShow(false);
-            } else if (window.scrollY < lastScrollY - 3) { // if scroll up show the navbar
-                setShow(true);
-            }
+	const controlNavbar = () => {
+		if (typeof window !== 'undefined') {
+			if (window.scrollY > lastScrollY + 3) {
+				// if scroll down hide the navbar
+				setShow(false);
+			} else if (window.scrollY < lastScrollY - 3) {
+				// if scroll up show the navbar
+				setShow(true);
+			}
 
-            // remember current page location to use in the next move
-            setLastScrollY(window.scrollY);
-        }
-    };
+			// remember current page location to use in the next move
+			setLastScrollY(window.scrollY);
+		}
+	};
 
-    onMount(() => {
-        if (typeof window !== 'undefined') {
-            window.addEventListener('scroll', controlNavbar);
-        }
-    });
+	onMount(() => {
+		if (typeof window !== 'undefined') {
+			window.addEventListener('scroll', controlNavbar);
+		}
+	});
 </script>
 
 <div id="navbar" class:with-shadow={addShadow}>
 	{#if visibleNav}
-		<div in:slide={{
-			start: 0,
-			duration: 200
-		}} out:slide={{
-			start: 0,
-			duration: 200
-		}} class="navbar-wrapper">
+		<div
+			in:slide={{
+				duration: 200
+			}}
+			out:slide={{
+				duration: 200
+			}}
+			class="navbar-wrapper"
+		>
 			<!--Logo-->
 			<a href="/">
 				<img class="brand-logo" src="/transparent-icon.svg" alt="Cooversa Logo" />
@@ -73,25 +77,29 @@
 
 			<!-- Secondary Nav -->
 			{#if !$currentUser}
-
 				<nav class="secondary-nav">
 					<a on:click={navItemClicked} href="/auth/login" class="primary-nav-item">Login</a>
 					<a on:click={navItemClicked} href="/apply" class="secondary-nav-item">Apply Now</a>
 				</nav>
-
+			{:else if $currentUser.role === 'ADMIN' || $currentUser.role === 'TEACHER'}
+				<nav class="secondary-nav">
+					<a on:click={navItemClicked} href="/admin" class="secondary-nav-item">Admin Panel</a>
+				</nav>
 			{:else if !$currentUser.profile}
 				<nav class="secondary-nav">
-					<a on:click={navItemClicked} href="/apply/step2" class="secondary-nav-item">Complete application</a>
+					<a on:click={navItemClicked} href="/apply/step2" class="secondary-nav-item"
+						>Complete application</a
+					>
 				</nav>
 			{:else}
 				<nav class="secondary-nav">
 					<a on:click={navItemClicked} href="/dashboard" class="secondary-nav-item">Dashboard</a>
 				</nav>
 			{/if}
-<!--			<nav class="secondary-nav space-x-5">-->
-<!--				<a on:click={navItemClicked} href="/auth/login" class="primary-nav-item">Login</a>-->
-<!--				<a on:click={navItemClicked} href="/apply" class="secondary-nav-item">Apply Now</a>-->
-<!--			</nav>-->
+			<!--			<nav class="secondary-nav space-x-5">-->
+			<!--				<a on:click={navItemClicked} href="/auth/login" class="primary-nav-item">Login</a>-->
+			<!--				<a on:click={navItemClicked} href="/apply" class="secondary-nav-item">Apply Now</a>-->
+			<!--			</nav>-->
 
 			<!-- Mobile Nav Toggler -->
 			<button on:click={toggleNav} class="mobile-nav-toggle" aria-label="toggle menu">
@@ -135,9 +143,10 @@
 				<a on:click={navItemClicked} href="/auth/login" class="mobile-nav-item">Login</a>
 				<a on:click={navItemClicked} href="/apply" class="mobile-nav-item-btn">Apply Now</a>
 			{:else if !$currentUser.profile}
-				<a on:click={navItemClicked} href="/apply/step2" class="mobile-nav-item-btn">Complete application</a>
+				<a on:click={navItemClicked} href="/apply/step2" class="mobile-nav-item-btn"
+					>Complete application</a
+				>
 			{:else}
-
 				<a on:click={navItemClicked} href="/dashboard" class="mobile-nav-item-btn">Dashboard</a>
 			{/if}
 		</div>

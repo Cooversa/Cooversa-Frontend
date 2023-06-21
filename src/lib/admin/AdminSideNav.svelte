@@ -89,7 +89,7 @@
 
 	<!-- Logo -->
 	<div class="hidden md:flex">
-		<a href="/dashboard">
+		<a href="/admin">
 			<img
 				src={isOpen ? '/transparent-icon.svg' : '/transparent-c.svg'}
 				alt="Cooversa white icon"
