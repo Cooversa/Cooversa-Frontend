@@ -8,7 +8,7 @@
 </svelte:head>
 
 <main>
-	<div class="mb-10">
+	<div>
 		<h2 class="text-2xl font-semibold">
 			Welcome <span class="text-primary">{$currentUser?.profile.firstName || 'Admin'}</span>
 		</h2>
@@ -16,6 +16,9 @@
 	{#if $currentUser?.role === 'ADMIN'}
 		<Analytics />
 	{/if}
+	<div class="mb-5">
+		<h2 class="text-2xl text-gray-500 font-medium">Navigations</h2>
+	</div>
 	<div class="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-10">
 		<a
 			href="/admin/users"
