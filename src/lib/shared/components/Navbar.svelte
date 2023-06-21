@@ -83,7 +83,7 @@
 				</nav>
 			{:else if $currentUser.role === 'ADMIN' || $currentUser.role === 'TEACHER'}
 				<nav class="secondary-nav">
-					<a on:click={navItemClicked} href="/admin" class="secondary-nav-item">Admin Panel</a>
+					<a on:click={navItemClicked} href="/admin" class="secondary-nav-item">Dashboard</a>
 				</nav>
 			{:else if !$currentUser.profile}
 				<nav class="secondary-nav">
@@ -143,7 +143,7 @@
 				<a on:click={navItemClicked} href="/auth/login" class="mobile-nav-item">Login</a>
 				<a on:click={navItemClicked} href="/apply" class="mobile-nav-item-btn">Apply Now</a>
 			{:else if $currentUser.role === 'ADMIN' || $currentUser.role === 'TEACHER'}
-				<a on:click={navItemClicked} href="/admin" class="mobile-nav-item-btn">Admin Panel</a>
+				<a on:click={navItemClicked} href="/admin" class="mobile-nav-item-btn">Dashboard</a>
 			{:else if !$currentUser.profile}
 				<a on:click={navItemClicked} href="/apply/step2" class="mobile-nav-item-btn"
 					>Complete application</a
