@@ -110,9 +110,14 @@
 		color: #454545;
 	}
 
+	.form-input-full:focus {
+		outline: none;
+		border: 1px solid #5c57ff;
+	}
+
 	.form-input:focus {
 		outline: none;
-		border: 1px solid #000;
+		border: 1px solid #5c57ff;
 	}
 
 	.form-error {

@@ -156,7 +156,7 @@
 		</section>
 		<form
 			on:submit|preventDefault={handleSave}
-			class="form py-5 gap-x-10 grid grid-cols-1  w-full md:grid-cols-2"
+			class="form py-5 gap-x-10 grid grid-cols-1  w-full md:grid-cols-1"
 		>
 			{#if user.profile}
 				<div class="form-group">
@@ -221,7 +221,7 @@
 			<div class="form-group">
 				<label for="role" class="form-label">Role:</label>
 				<Selector
-					name="Role"
+					name="role"
 					placeholder="User Role"
 					options={RoleOptions}
 					bind:selected={user.role}
@@ -254,7 +254,7 @@
 				</div>
 			{/if}
 
-			<div class="form-group col-span-2">
+			<div class="form-group md:col-span-2">
 				<button class="w-full rounded flex justify-center px-3 py-2 bg-primary text-white">
 					{#if saving} <LoadingSvg /> {:else} Save {/if}
 				</button>
