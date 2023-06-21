@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type { Module } from '$lib/client/schools/types';
+	import type { Course, Module } from '$lib/client/schools/types';
 	import client from '$lib/client';
 	import { showAlert } from '$lib/utils/alert';
 
 	export let data: any;
 
-	const course = data.course;
-	const modules = data.modules;
+	const course: Course = data.course;
+	const modules: Module[] = data.modules;
 
 	let activeModuleId = '';
 	let activeModule: Module | null = null;
@@ -50,6 +50,7 @@
 
 <svelte:head>
 	<title>{course.name}</title>
+	<meta name="description" content={course.excerpt} />
 </svelte:head>
 
 <div>
@@ -74,9 +75,9 @@
 						on:keydown={() => console.log('Key Down')}
 					>
 						<h3 class="accordion-title">{module.name}</h3>
-						{#if getAvailability(module.available_at)}
+						{#if getAvailability(module.availableOn)}
 							<button class="accordion-button" aria-label="Expand Accordion" aria-expanded="false">
-								{#if activeModuleId === module.id}
+								{#if activeModuleId === module.moduleId}
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										width="24"

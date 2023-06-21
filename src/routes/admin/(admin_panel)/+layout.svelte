@@ -37,6 +37,8 @@
 </script>
 
 <AdminSideNav on:navState={setSideNavState} />
-<div class="{!sideNavOpen ? 'md:ml-24' : 'md:ml-80'} py-[2.5rem] transition-all md:mr-10 px-5">
+<div
+	class="{sideNavOpen ? 'md:ml-80' : 'md:ml-24'} py-[2.5rem] transition-all md:mr-10 md:px-5 px-10"
+>
 	<slot />
 </div>

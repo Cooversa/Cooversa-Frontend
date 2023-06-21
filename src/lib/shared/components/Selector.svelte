@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import type { Course } from '$lib/client/schools/types';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
 
 	const dispatch = createEventDispatcher();
@@ -20,12 +21,26 @@
 
 	export let selected: any | null = null;
 
+	export let selectMultiple = false;
+	export let addUnavailable = false;
+
 	function onSelected(option: Option) {
-		selected = option.value;
+		if (selectMultiple) {
+			if (selected.every((e) => e.label !== option.label)) {
+				selected = [...selected, option];
+			}
+		} else {
+			selected = option.value;
+		}
 		dispatch('selected', selected);
 		toggle();
 		search = '';
 	}
+
+	const removeSelected = (index: number) => {
+		selected = selected.filter((s: Option, i: number) => i !== index);
+		// dispatch('remove', selectedItemIndex);
+	};
 
 	export let options: Option[];
 
@@ -40,6 +55,10 @@
 		});
 		selectedLabel = selectedOption?.label || placeholder;
 	}
+	onMount(() => {
+		if (!(options instanceof Option)) {
+		}
+	});
 </script>
 
 <div class="wrapper relative {full ? 'w-[100%]' : 'w-[100%] md:w-[80%] lg:w-[50%]'}">
@@ -50,7 +69,17 @@
 		on:click={toggle}
 	>
 		<div>
-			{#if selected}
+			{#if selectMultiple && selected}
+				<div class="flex gap-1 flex-wrap	">
+					{#each selected as selectedArrayElement, index}
+						<p class="p-1 bg-primary text-white rounded">
+							{selectedArrayElement.label}
+							<!-- svelte-ignore a11y-click-events-have-key-events -->
+							<iconify-icon icon="iconoir:cancel" on:click={() => removeSelected(index)} />
+						</p>
+					{/each}
+				</div>
+			{:else if selected}
 				{selectedLabel.length > 30 ? selectedLabel.slice(0, 30) + '...' : selectedLabel}
 			{:else}
 				{placeholder}
@@ -74,9 +103,10 @@
 		<ul
 			in:slide={{ duration: 200 }}
 			out:slide={{ duration: 200 }}
-			class="bg-white w-full shadow-md absolute max-h-60 overflow-y-auto border-[#e5e5e5] border text-[14px] text-[#454545] rounded-[5px] mt-2"
+			class="bg-white w-full z-10 shadow-md absolute max-h-60 overflow-y-auto border-[#e5e5e5] border text-[14px] text-[#454545] rounded-[5px] mt-2"
 		>
 			<div class="flex items-center px-2 sticky top-0 bg-white">
+				<div />
 				<div class="text-[#1a1a1a]">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -100,10 +130,13 @@
 					{placeholder}
 					class="placeholder:text-[#454545] p-2 outline-none w-full"
 				/>
+				{#if addUnavailable}
+					<iconify-icon class="text-primary" width="20" icon="gridicons:add-outline" />
+				{/if}
 			</div>
 			{#each options as option}
 				<li
-					class="p-2 text-[14px] hover:bg-primary cursor-pointer hover:text-white
+					class="p-2 text-[14px] flex justify-between hover:bg-primary cursor-pointer hover:text-white
 					{option.label.toLowerCase() === selectedLabel.toLowerCase() && 'bg-primary text-white'}					{option.label
 						.toLowerCase()
 						.startsWith(search.toLowerCase())
@@ -112,7 +145,16 @@
 					on:click={() => onSelected(option)}
 					on:keyup={() => onSelected(option)}
 				>
-					{option.label}
+					{#if Array.isArray(selected) && selected.some((e) => e.label === option.label)}
+						{#if selected.every((e) => e.label === option.label)}
+							{option.label}
+							<iconify-icon icon="material-symbols:check" style="color: #22c55e;" width="20" />
+						{:else}
+							{option.label}
+						{/if}
+					{:else}
+						{option.label}
+					{/if}
 				</li>
 			{/each}
 		</ul>
