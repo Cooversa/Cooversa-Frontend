@@ -320,7 +320,7 @@
 					{#if processing}
 						<LoadingSvg />
 					{:else}
-						Create Course
+						Save
 					{/if}
 				</button>
 			</div>

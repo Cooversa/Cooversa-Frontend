@@ -23,7 +23,9 @@
 
 	function onSelected(option: Option) {
 		if (selectMultiple) {
-			if (selected.every((e: any) => e.label !== option.label)) {
+			if (selected.includes(option.value)) {
+				selected = selected.filter((s: any) => s !== option.value);
+			} else {
 				selected = [...selected, option.value];
 			}
 		} else {
@@ -180,8 +182,8 @@
 						on:click={() => onSelected(option)}
 						on:keyup={() => onSelected(option)}
 					>
-						{#if Array.isArray(selected) && selected.some((e) => e.label === option.label)}
-							{#if selected.every((e) => e.label === option.label)}
+						{#if Array.isArray(selected) && selected.some((e) => e === option.value)}
+							{#if selected.includes(option.value)}
 								{option.label}
 								<iconify-icon icon="material-symbols:check" style="color: #22c55e;" width="20" />
 							{:else}
