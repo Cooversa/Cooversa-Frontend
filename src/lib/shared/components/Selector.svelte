@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { Course } from '$lib/client/schools/types';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
+	import type { Option } from '$lib/shared/types/selector.types';
 
 	const dispatch = createEventDispatcher();
 	let open = false;
@@ -12,22 +12,19 @@
 		open = !open;
 	}
 
-	type Option = {
-		value: any;
-		label: string;
-	};
-
 	export let placeholder: string;
 
 	export let selected: any | null = null;
 
 	export let selectMultiple = false;
 	export let addUnavailable = false;
+	export let optionsLoading = false;
+	export let handleSearchExternally = false;
 
 	function onSelected(option: Option) {
 		if (selectMultiple) {
-			if (selected.every((e) => e.label !== option.label)) {
-				selected = [...selected, option];
+			if (selected.every((e: any) => e.label !== option.label)) {
+				selected = [...selected, option.value];
 			}
 		} else {
 			selected = option.value;
@@ -40,6 +37,12 @@
 	const removeSelected = (index: number) => {
 		selected = selected.filter((s: Option, i: number) => i !== index);
 		// dispatch('remove', selectedItemIndex);
+	};
+
+	const getLabelFromValue = (value: any) => {
+		const option = options.find((item) => item.value === value);
+
+		return option?.label || '';
 	};
 
 	export let options: Option[];
@@ -59,6 +62,17 @@
 		if (!(options instanceof Option)) {
 		}
 	});
+
+	// Debounce search
+	// Only search after 500ms of no typing
+	let timeout: any;
+
+	$: {
+		clearTimeout(timeout);
+		timeout = setTimeout(() => {
+			dispatch('search', search);
+		}, 500);
+	}
 </script>
 
 <div class="wrapper relative {full ? 'w-[100%]' : 'w-[100%] md:w-[80%] lg:w-[50%]'}">
@@ -73,7 +87,7 @@
 				<div class="flex gap-1 flex-wrap	">
 					{#each selected as selectedArrayElement, index}
 						<p class="p-1 bg-primary text-white rounded">
-							{selectedArrayElement.label}
+							{getLabelFromValue(selectedArrayElement)}
 							<!-- svelte-ignore a11y-click-events-have-key-events -->
 							<iconify-icon icon="iconoir:cancel" on:click={() => removeSelected(index)} />
 						</p>
@@ -103,7 +117,7 @@
 		<ul
 			in:slide={{ duration: 200 }}
 			out:slide={{ duration: 200 }}
-			class="bg-white w-full z-10 shadow-md absolute max-h-60 overflow-y-auto border-[#e5e5e5] border text-[14px] text-[#454545] rounded-[5px] mt-2"
+			class="bg-white w-full z-10  shadow-md absolute max-h-60 overflow-y-auto border-[#e5e5e5] border text-[14px] text-[#454545] rounded-[5px] mt-2"
 		>
 			<div class="flex items-center px-2 sticky top-0 bg-white">
 				<div />
@@ -134,29 +148,51 @@
 					<iconify-icon class="text-primary" width="20" icon="gridicons:add-outline" />
 				{/if}
 			</div>
-			{#each options as option}
-				<li
-					class="p-2 text-[14px] flex justify-between hover:bg-primary cursor-pointer hover:text-white
-					{option.label.toLowerCase() === selectedLabel.toLowerCase() && 'bg-primary text-white'}					{option.label
-						.toLowerCase()
-						.startsWith(search.toLowerCase())
-						? 'block'
-						: 'hidden'}"
-					on:click={() => onSelected(option)}
-					on:keyup={() => onSelected(option)}
-				>
-					{#if Array.isArray(selected) && selected.some((e) => e.label === option.label)}
-						{#if selected.every((e) => e.label === option.label)}
-							{option.label}
-							<iconify-icon icon="material-symbols:check" style="color: #22c55e;" width="20" />
+			{#if optionsLoading}
+				<div class="flex justify-center my-5">
+					<svg
+						class="animate-spin  h-5 w-5 text-primary"
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+					>
+						<circle
+							class="opacity-25"
+							cx="12"
+							cy="12"
+							r="10"
+							stroke="currentColor"
+							stroke-width="4"
+						/>
+						<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+					</svg>
+				</div>
+			{:else}
+				{#each options as option}
+					<li
+						class="p-2 text-[14px] flex justify-between hover:bg-primary cursor-pointer hover:text-white
+					{option.label.toLowerCase() === selectedLabel.toLowerCase() && 'bg-primary text-white'}					
+					{handleSearchExternally
+							? 'block'
+							: option.label.toLowerCase().includes(search.toLowerCase())
+							? 'block'
+							: 'hidden'}"
+						on:click={() => onSelected(option)}
+						on:keyup={() => onSelected(option)}
+					>
+						{#if Array.isArray(selected) && selected.some((e) => e.label === option.label)}
+							{#if selected.every((e) => e.label === option.label)}
+								{option.label}
+								<iconify-icon icon="material-symbols:check" style="color: #22c55e;" width="20" />
+							{:else}
+								{option.label}
+							{/if}
 						{:else}
 							{option.label}
 						{/if}
-					{:else}
-						{option.label}
-					{/if}
-				</li>
-			{/each}
+					</li>
+				{/each}
+			{/if}
 		</ul>
 	{/if}
 </div>

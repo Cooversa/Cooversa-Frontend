@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import { onMount } from 'svelte';
 	import { Toaster } from 'svelte-french-toast';
+	import '@tinymce/tinymce-webcomponent';
+	import '../styles/tinymce.css';
 </script>
 
 <Toaster />
