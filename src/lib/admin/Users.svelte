@@ -70,7 +70,7 @@
 </script>
 
 <main class="relative">
-	<form on:submit={handleFilter} class="w-full mb-20">
+	<form on:submit|preventDefault={handleFilter} class="w-full mb-20">
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div
 			on:click={focusInput}

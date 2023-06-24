@@ -13,6 +13,7 @@ export interface School {
 export interface Track {
 	trackId: string;
 	name: string;
+	schoolId: string;
 	slug: string;
 	description: string;
 	createdAt: Date;
@@ -32,6 +33,7 @@ export interface Course {
 	schoolId: string;
 	school: School;
 	modules: Module[];
+	tracks: Track[] | string[];
 }
 
 export interface CreateCourse {

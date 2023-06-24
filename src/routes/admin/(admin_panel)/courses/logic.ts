@@ -6,7 +6,9 @@ export const getAllCourses = async (search?: string) => {
 	try {
 		const courses = await client.get('/courses', {
 			params: {
-				'filter.search': `contains:${search || ''}`
+				'filter.name': `contains:${search || ''}`,
+				'filter.description': `contains:${search || ''}`,
+				'filter.excerpt': `contains:${search || ''}`
 			}
 		});
 		return courses.data.items;

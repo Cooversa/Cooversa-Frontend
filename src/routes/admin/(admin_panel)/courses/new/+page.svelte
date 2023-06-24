@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { CreateCourse, School } from '$lib/client/schools/types';
+	import type { CreateCourse, School, Track } from '$lib/client/schools/types';
 	import type { BreadcrumbType } from '$lib/shared/types/breadcrumbs.types';
 	import Breadcrumb from '$lib/shared/components/Breadcrumb.svelte';
 	import RichTextEditor from '$lib/shared/components/RichTextEditor.svelte';
@@ -7,7 +7,7 @@
 	import { PUBLIC_CLOUDINARY_CLOUD_NAME } from '$env/static/public';
 	import Selector from '$lib/shared/components/Selector.svelte';
 	import type { Option } from '$lib/shared/types/selector.types';
-	import { getSchools } from '$lib/client/schools';
+	import { getSchools, getTracks } from '$lib/client/schools';
 	import { onMount } from 'svelte';
 	import LoadingSvg from '$lib/shared/components/LoadingSvg.svelte';
 	import { schema } from '../schema';
@@ -35,13 +35,14 @@
 		}
 	];
 
-	let newCourseData: CreateCourse = {
+	let newCourseData: any = {
 		name: '',
 		description: '',
 		excerpt: '',
 		featuredImage: '',
 		schoolId: '',
-		acceptedStatuses: []
+		acceptedStatuses: [],
+		tracks: []
 	};
 
 	let acceptedStatusesOptions: Option[] = [
@@ -77,7 +78,6 @@
 			},
 			(error: any, result: any) => {
 				if (!error && result && result.event === 'success') {
-					console.log('Done! Here is the image info: ', result.info);
 					newCourseData.featuredImage = result.info.secure_url;
 				} else if (error) {
 					showAlert({
@@ -94,6 +94,10 @@
 	let schoolsOptions: Option[] = [];
 	let schoolsLoading = true;
 
+	let tracks: Track[] = [];
+	let tracksOptions: Option[] = [];
+	let tracksLoading = false;
+
 	const handleSchoolSearch = async (e: any) => {
 		const search = e.detail;
 		try {
@@ -101,6 +105,17 @@
 			schools = await getSchools(search);
 		} finally {
 			schoolsLoading = false;
+		}
+	};
+
+	const handleTrackSearch = async (e: any) => {
+		const search = e.detail;
+		tracksLoading = true;
+		try {
+			tracksLoading = true;
+			tracks = await getTracks(search);
+		} finally {
+			tracksLoading = false;
 		}
 	};
 
@@ -113,6 +128,26 @@
 		});
 	};
 
+	const mapTracksToOptions = (tracks: Track[]) => {
+		return tracks.map((track) => {
+			return {
+				value: track.trackId,
+				label: track.name
+			};
+		});
+	};
+
+	const getTrackLabel = async (trackId: string) => {
+		const response = await client.get(`/tracks`, {
+			params: {
+				'filter.trackId': `equals:${trackId}`
+			}
+		});
+
+		const tracks = response.data.items;
+		return tracks[0].name;
+	};
+
 	$: {
 		schoolsOptions = mapSchoolsToOptions(schools);
 		// Append a none option to the first index
@@ -122,14 +157,22 @@
 		});
 	}
 
+	$: {
+		tracksOptions = mapTracksToOptions(tracks);
+	}
+
 	let processing = false;
 
 	const handleSubmit = async () => {
 		processing = true;
 		errors = {};
 		try {
-			const data = filteredObj(newCourseData);
+			const data: any = filteredObj(newCourseData);
 			schema.parse(data);
+
+			if (!data.schoolId && !data.tracks?.length) {
+				throw new Error('Please select a school or a track');
+			}
 
 			const response = await client.post('/courses', data);
 			showAlert({
@@ -137,7 +180,7 @@
 				type: 'success'
 			});
 			await goto(`/admin/courses`);
-		} catch (err) {
+		} catch (err: any) {
 			if (err instanceof z.ZodError) {
 				errors = err.flatten().fieldErrors;
 				console.log(errors);
@@ -149,7 +192,8 @@
 				});
 			} else {
 				showAlert({
-					message: 'Error updating course',
+					message: err.message || 'Error updating course',
+
 					type: 'error'
 				});
 			}
@@ -239,7 +283,7 @@
 			{/if}
 		</div>
 
-		<div class="form-group">
+		<div class="form-group md:col-span-2">
 			<label for="accepted_statuses" class="form-label">Accepted Statuses</label>
 			<Selector
 				selectMultiple={true}
@@ -260,8 +304,33 @@
 			{/if}
 		</div>
 
+		<div class="form-group md:col-span-2">
+			<label for="accepted_statuses" class="form-label">Tracks (optional)</label>
+			<Selector
+				options={tracksOptions}
+				placeholder="Select tracks"
+				full={true}
+				name="tracks"
+				bind:selected={newCourseData.tracks}
+				optionsLoading={tracksLoading}
+				on:search={handleTrackSearch}
+				handleSearchExternally
+				selectMultiple
+				getLabelFromValue={getTrackLabel}
+			/>
+			{#if errors.tracks}
+				{#each errors.tracks as error}
+					<p class="form-error">{error}</p>
+				{/each}
+			{:else}
+				<p class="mt-2 text-xs font-medium text-gray-500">
+					The tracks that the course is directly below.
+				</p>
+			{/if}
+		</div>
+
 		<div class="form-group">
-			<label for="accepted_statuses" class="form-label">School (optional)</label>
+			<label for="school" class="form-label">School (optional)</label>
 			<Selector
 				options={schoolsOptions}
 				placeholder="Select School"

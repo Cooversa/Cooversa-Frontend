@@ -4,8 +4,22 @@
 	import NewButton from '$lib/shared/components/NewButton.svelte';
 	import type { BreadcrumbType } from '$lib/shared/types/breadcrumbs.types';
 	import Breadcrumb from '../../../../lib/shared/components/Breadcrumb.svelte';
+	import SearchInput from '../../../../lib/shared/components/SearchInput.svelte';
 
 	let courses = getAllCourses();
+	let searching: boolean = false;
+
+	let handleSearch = (e: any) => {
+		searching = true;
+		let search = e.detail;
+		try {
+			courses = getAllCourses(search);
+		} catch (e) {
+			console.log(e);
+		} finally {
+			searching = false;
+		}
+	};
 
 	let breadcrumbs: BreadcrumbType[] = [
 		{
@@ -30,6 +44,8 @@
 
 	<NewButton href="/admin/courses/new" tooltip="New Course" />
 
+	<SearchInput on:search={handleSearch} loading={searching} placeholder="Search for course" />
+
 	<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 		{#await courses}
 			<Loading />
@@ -53,6 +69,8 @@
 						<p class="text-gray-500 line-clamp-3 text-[14px]">{course.excerpt}</p>
 					</div>
 				</div>
+			{:else}
+				<p class="text-center md:col-span-2 text-lg font-semibold text-gray-500">No course found</p>
 			{/each}
 		{/await}
 	</section>

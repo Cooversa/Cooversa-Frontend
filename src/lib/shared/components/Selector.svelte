@@ -41,7 +41,7 @@
 		// dispatch('remove', selectedItemIndex);
 	};
 
-	const getLabelFromValue = (value: any) => {
+	export let getLabelFromValue: (value: any) => any = (value: any) => {
 		const option = options.find((item) => item.value === value);
 
 		return option?.label || '';
@@ -89,7 +89,12 @@
 				<div class="flex gap-1 flex-wrap	">
 					{#each selected as selectedArrayElement, index}
 						<p class="p-1 bg-primary text-white rounded">
-							{getLabelFromValue(selectedArrayElement)}
+							{#await getLabelFromValue(selectedArrayElement)}
+								Loading
+							{:then label}
+								{label}
+							{/await}
+							<!-- {getLabelFromValue(selectedArrayElement)} -->
 							<!-- svelte-ignore a11y-click-events-have-key-events -->
 							<iconify-icon icon="iconoir:cancel" on:click={() => removeSelected(index)} />
 						</p>
