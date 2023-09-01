@@ -51,7 +51,7 @@
 	});
 </script>
 
-<div id="navbar" class:with-shadow={addShadow}>
+<div id="navbar">
 	{#if visibleNav}
 		<div
 			in:slide={{
@@ -69,17 +69,16 @@
 
 			<!-- Primary Nav -->
 			<nav class="primary-nav">
-				<a on:click={navItemClicked} href="/#curriculum" class="primary-nav-item">Curriculum</a>
-				<a on:click={navItemClicked} href="/#faq" class="primary-nav-item">FAQs</a>
-				<a on:click={navItemClicked} href="/#tuition" class="primary-nav-item">Tuition</a>
 				<a on:click={navItemClicked} href="/#about" class="primary-nav-item">About us</a>
+				<a on:click={navItemClicked} href="/#curriculum" class="primary-nav-item">Curriculum</a>
+				<a on:click={navItemClicked} href="/#tuition" class="primary-nav-item">Tuition</a>
+				<a on:click={navItemClicked} href="/#faq" class="primary-nav-item">FAQs</a>
 			</nav>
 
 			<!-- Secondary Nav -->
 			{#if !$currentUser}
 				<nav class="secondary-nav">
 					<a on:click={navItemClicked} href="/auth/login" class="primary-nav-item">Login</a>
-					<a on:click={navItemClicked} href="/apply" class="secondary-nav-item">Apply Now</a>
 				</nav>
 			{:else if $currentUser.role === 'ADMIN' || $currentUser.role === 'TEACHER'}
 				<nav class="secondary-nav">
@@ -161,6 +160,7 @@
 		width: 100%;
 		background-color: #ffffff;
 		z-index: 9999;
+		border: 0.5px #f0f0f5 solid;
 	}
 
 	#navbar.with-shadow {
@@ -170,7 +170,7 @@
 	.navbar-wrapper {
 		max-width: 1560px;
 		margin: 0 auto;
-		padding: 30px 60px;
+		padding: 20px 60px;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
