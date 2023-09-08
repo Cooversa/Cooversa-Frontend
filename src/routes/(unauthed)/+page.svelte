@@ -7,6 +7,8 @@
 	import Faq from '$lib/components/Faq.svelte';
 	import Loading from '$lib/shared/components/Loading.svelte';
 	import loading from '$lib/shared/store/loading.js';
+	import Community from '$lib/components/Community.svelte';
+	import Attestation from '$lib/components/Attestation.svelte';
 </script>
 
 <svelte:head>
@@ -42,8 +44,10 @@
 	<Loading />
 {/if}
 <Hero />
+<Attestation />
 <WhatWeDo />
 <AboutUs />
 <Curriculum />
+<Community />
 <Tuition />
 <Faq />

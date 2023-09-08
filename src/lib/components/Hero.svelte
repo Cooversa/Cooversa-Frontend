@@ -31,7 +31,7 @@
 	};
 </script>
 
-<section bind:this={hero} class="hero">
+<section bind:this={hero} class="hero hero-with-bg">
 	<div class="hero-content">
 		<h1 class="hero-title">
 			Discover boundless opportunities with our <span class="hero-title-span text-secondary"
@@ -49,6 +49,11 @@
 		<a href="/apply" class="hero-button">Apply now</a>
 	</div>
 </section>
+<img
+	src="hero-bg.svg"
+	class="w-full h-auto hero"
+	alt="Lines intersecting to form a grid, It serves as a background for aesthetic purpose"
+/>
 
 <style>
 	@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
@@ -58,75 +63,16 @@
 		justify-content: center;
 		align-items: center;
 		flex-direction: column;
+		gap: 7em;
 		padding: 60px;
 		max-width: 1300px;
 		margin: 0 auto;
 		overflow: hidden;
+	}
+	.hero-with-bg {
 		background: url(grid.svg) no-repeat center;
 	}
 
-	/* .grid-container .grid {
-		position: absolute;
-		top: 0;
-		left: 0;
-		background: url(Squares.jpg) repeat;
-		width: 100%;
-		height: 100%;
-		z-index: -10;
-		background-size: 800px;
-	} */
-	.square-container {
-		display: flex;
-		position: absolute;
-		flex-wrap: wrap;
-		align-items: center;
-		justify-content: center;
-		top: 0;
-		height: 100%; /* Set container to full viewport height */
-		width: 100%; /* Set container to full viewport width */
-		margin: 0;
-		padding: 0;
-		z-index: -2;
-		--x: 0px;
-		--y: 0px;
-	}
-
-	.square {
-		/* Allow squares to grow and shrink as needed */
-		width: 50px;
-		height: 50px; /* Calculate width based on square count */
-		border: red 0.5px solid;
-		margin: 0;
-		padding: 0;
-		/* opacity: 0; */
-		-webkit-mask-image: radial-gradient(
-			300px circle at var(--x) var(--y),
-			black 20%,
-			rgba(0, 0, 0, 0.25),
-			transparent
-		);
-		mask-image: radial-gradient(
-			300px circle at var(--x) var(--y),
-			black 20%,
-			rgba(0, 0, 0, 0.25),
-			transparent
-		);
-	}
-	/* .square-container::after {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background: radial-gradient(
-			rgb(23, 24, 37) 40%,
-			rgb(102, 51, 238) 50%,
-			rgb(142, 100, 255),
-			rgb(249, 38, 114)
-		);
-		mix-blend-mode: darken;
-	} */
 	.hero-content {
 		display: flex;
 		flex-direction: column;

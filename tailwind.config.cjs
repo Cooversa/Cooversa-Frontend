@@ -17,17 +17,25 @@ module.exports = {
 		extend: {
 			fontFamily: {
 				gilmer: ['Gilmer', 'sans-serif'],
-				besley: ['Besley', 'serif']
+				besley: ['Besley', 'serif'],
+				jakarta: ['Plus Jakarta Sans', 'sans-serif']
 			},
 			colors: {
 				primary: '#5C57FF',
 				secondary: '#FED924',
+				tetiary: '#E9CA32',
+				foundationalBlack: '#575759',
+				darkBg: '#0B0A26',
+				success: '#22C55E',
 				grey: {
 					100: '#F5F7FA',
 					1000: '#1F2933'
 				}
+			},
+			components: {
+				customCard:
+					'shadow-md p-[1.875rem] flex flex-col items-start gap-[0.625rem] w-[22.875rem] h-[16.5rem]'
 			}
 		}
-	},
-	plugins: [require('@tailwindcss/line-clamp'), require('@tailwindcss/typography')]
+	}
 };
