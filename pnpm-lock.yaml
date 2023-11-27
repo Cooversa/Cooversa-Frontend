@@ -17,9 +17,6 @@ dependencies:
   '@tinymce/tinymce-svelte':
     specifier: ^1.0.1
     version: 1.0.1
-  '@tinymce/tinymce-webcomponent':
-    specifier: ^2.0.2
-    version: 2.0.2
   axios:
     specifier: ^1.3.4
     version: 1.3.4
@@ -574,10 +571,6 @@ packages:
     resolution: {integrity: sha512-mjso1Mx9FOPxwou528UmINIcE2hBbUpnC9AEInlvIXutydklfSGSGEeYJ57CBTxzgsMEJGw2LYHGC8R7KoEAeA==}
     dependencies:
       rollup-plugin-execute: 1.1.1
-    dev: false
-
-  /@tinymce/tinymce-webcomponent@2.0.2:
-    resolution: {integrity: sha512-mt3cP20mrKXTFsbO+ghi/8+qNSgxKkWq1NTSL/oxURl7lRShnaWMj7i4Wik21XE7un5xAs9qlRbm9Eyw9xBfYQ==}
     dev: false
 
   /@types/chai-subset@1.3.3:
